@@ -4,66 +4,92 @@ const PUBLICATIONS_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1/pu
 const RESERVATIONS_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1/bookings"
 
 
-// TODO: esto habría que refactorizarlo
-class Requester {
+class ServerAPI {
 
-    async register(user) {
-        let response  = await fetch(USERS_BASE_ENDPOINT + '/users', {
+    async post(endpoint, body) {
+        let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                first_name: user.name,
-                last_name: user.lastName,
-                email: user.email,
-                password: user.password
-            })
-        }).then(response =>
+            body: JSON.stringify(body)
+        }).then(response => {
             response.json().then(jsonResponse => {
                 if(!response.ok){
                     throw new Error(jsonResponse.message)
                 }
                 return jsonResponse
             })
-        )
+        })
         return response
     }
 
-    async login(userCredentials) {
-        let response = fetch(USERS_BASE_ENDPOINT + '/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: userCredentials.username,
-                password: userCredentials.password,
-            })
-        }).then(response =>
+    async get(endpoint, params={}) {
+        var encodedParams = [];
+        Object.entries(params).map(([k, v]) => {
+            encodedParams.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+        })
+        let publications = await fetch(endpoint + `?${encodedParams.join('&')}`).then(response =>
             response.json().then(jsonResponse => {
                 if(!response.ok){
                     throw new Error(jsonResponse.message)
                 }
-                // no devuelve el ID asi que lo agregamos nosotros
-                if (!jsonResponse.id) {
-                jsonResponse.id = 1
-                }
                 return jsonResponse
             })
         )
+        return publications
+    }
+}
+
+
+// TODO: esto habría que refactorizarlo
+class Requester {
+
+    constructor() {
+        this.serverAPI = new ServerAPI()
+    }
+
+    async register(user) {
+        return this.serverAPI.post(USERS_BASE_ENDPOINT + '/users', {
+            first_name: user.name,
+            last_name: user.lastName,
+            email: user.email,
+            password: user.password
+        })
+    }
+
+    async login(userCredentials) {
+        var response = await this.serverAPI.post(USERS_BASE_ENDPOINT + '/login', {
+            email: userCredentials.username,
+            password: userCredentials.password,
+        })
+        if (!response.id) {
+            response.id = 1
+        }
         return response
     }
 
     async publications()  {
-        let publications = await fetch(PUBLICATIONS_ENDPOINT)
-            .then(response => {
-                return response.json()
-            }).catch( error => {
-                return null
-            })
+        var publications = await this.serverAPI.get(PUBLICATIONS_ENDPOINT)
+        console.log(publications)
         return publications
     }
+
+    async publish(publicationDetails) {
+        return this.serverAPI.post(PUBLICATIONS_ENDPOINT, {
+            user_id: 1,
+            title: publicationDetails.title,
+            description: publicationDetails.description,
+            rooms: publicationDetails.rooms,
+            beds: publicationDetails.beds,
+            bathrooms: publicationDetails.bathrooms,
+            price_per_night: publicationDetails.price_per_night,
+            loc: {
+              latitude: publicationDetails.coordinates[0],
+              longitude: publicationDetails.coordinates[1]
+            }
+        });
+   }
 
     reservations() {
         let reservations = []
