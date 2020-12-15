@@ -29,7 +29,7 @@ class ServerAPI {
         Object.entries(params).map(([k, v]) => {
             encodedParams.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
         })
-        let publications = await fetch(endpoint + `?${encodedParams.join('&')}`).then(response =>
+        var response = await fetch(endpoint + `?${encodedParams.join('&')}`).then(response =>
             response.json().then(jsonResponse => {
                 if(!response.ok){
                     throw new Error(jsonResponse.message)
@@ -37,8 +37,28 @@ class ServerAPI {
                 return jsonResponse
             })
         )
-        return publications
+        return response
     }
+
+    async put(endpoint, body) {
+        let response  = await fetch(endpoint, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => {
+            response.json().then(jsonResponse => {
+                if(!response.ok){
+                    throw new Error(jsonResponse.message)
+                }
+                return jsonResponse
+            })
+        })
+        return response
+    }
+
+
 }
 
 
@@ -49,12 +69,12 @@ class Requester {
         this.serverAPI = new ServerAPI()
     }
 
-    async register(user) {
+    async register(userData) {
         return this.serverAPI.post(USERS_BASE_ENDPOINT + '/users', {
-            first_name: user.name,
-            last_name: user.lastName,
-            email: user.email,
-            password: user.password
+            first_name: userData.name,
+            last_name: userData.lastName,
+            email: userData.email,
+            password: userData.password
         })
     }
 
@@ -71,7 +91,6 @@ class Requester {
 
     async publications()  {
         var publications = await this.serverAPI.get(PUBLICATIONS_ENDPOINT)
-        console.log(publications)
         return publications
     }
 
@@ -89,7 +108,7 @@ class Requester {
               longitude: publicationDetails.coordinates[1]
             }
         });
-   }
+    }
 
     reservations() {
         let reservations = []
@@ -104,6 +123,14 @@ class Requester {
             reservations.push(fake_reservation)
         }
         return reservations
+    }
+
+    async profileData(userData) {
+        return this.serverAPI.get(USERS_BASE_ENDPOINT + '/users/' + userData.id)
+    }
+
+    async updateProfileData(userID, newUserData) {
+        return this.serverAPI.put(USERS_BASE_ENDPOINT + '/users/' + userID, newUserData)
     }
 }
 
