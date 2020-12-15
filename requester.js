@@ -1,7 +1,44 @@
 
 const USERS_BASE_ENDPOINT = "https://bookbnb5-users-microservice.herokuapp.com/v1"
-const PUBLICATIONS_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1/publications"
+const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1"
 const RESERVATIONS_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1/bookings"
+
+
+class API {
+    async post(endpoint, body){
+        return new Promise((resolve, refuse) => {
+            setTimeout(() => {
+                console.log('Making POST with ')
+                console.log(endpoint)
+                console.log(body)
+                resolve()
+            }, 1000)
+        })
+    }
+
+    async get(endpoint, params={}) {
+        return new Promise((resolve, refuse) => {
+            setTimeout(() => {
+                console.log('Making GET with ')
+                console.log(endpoint)
+                console.log(params)
+                resolve()
+            }, 1000)
+        })
+    }
+
+    async put(endpoint, body) {
+        return new Promise((resolve, refuse) => {
+            setTimeout(() => {
+                console.log('Making PUT with ')
+                console.log(endpoint)
+                console.log(body)
+                resolve()
+            }, 1000)
+        })
+    }
+}
+
 
 
 class ServerAPI {
@@ -66,6 +103,7 @@ class ServerAPI {
 class Requester {
 
     constructor() {
+//        this.serverAPI = new API()
         this.serverAPI = new ServerAPI()
     }
 
@@ -90,12 +128,12 @@ class Requester {
     }
 
     async publications()  {
-        var publications = await this.serverAPI.get(PUBLICATIONS_ENDPOINT)
+        var publications = await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications')
         return publications
     }
 
     async publish(publicationDetails) {
-        return this.serverAPI.post(PUBLICATIONS_ENDPOINT, {
+        return this.serverAPI.post(PUBLICATIONS_BASE_ENDPOINT + '/publications', {
             user_id: 1,
             title: publicationDetails.title,
             description: publicationDetails.description,
@@ -107,7 +145,7 @@ class Requester {
               latitude: publicationDetails.coordinates[0],
               longitude: publicationDetails.coordinates[1]
             }
-        });
+       });
     }
 
     reservations() {
@@ -131,6 +169,20 @@ class Requester {
 
     async updateProfileData(userID, newUserData) {
         return this.serverAPI.put(USERS_BASE_ENDPOINT + '/users/' + userID, newUserData)
+    }
+
+    async searchPublications(searchParams={}) {
+        var params = {
+            bathrooms: 0,
+            rooms: 0,
+            beds: 0,
+            ...searchParams
+        }
+        console.log('Searching by params')
+        console.log(params)
+        var response =  await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', params)
+        console.log(response)
+        return response
     }
 }
 
