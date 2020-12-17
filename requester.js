@@ -130,8 +130,12 @@ class Requester {
     }
 
     async publications(filters={})  {
-        let publications = await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications');
+        let publications = await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', filters);
         return publications;
+    }
+
+    async getPublication(publicationId) {
+        return this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications/' + publicationId)
     }
 
     async publish(publicationDetails) {
@@ -166,7 +170,7 @@ class Requester {
     }
 
     async users() {
-        return this.serverAPI.get(USERS_BASE_ENDPOINT + '/users/');
+        return this.serverAPI.get(USERS_BASE_ENDPOINT + '/users');
     }
 
     async profileData(userData) {
