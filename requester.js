@@ -41,23 +41,28 @@ class API {
 
 
 
+/*  La mayoría de los métodos hacen lo mismo (un fetch) podríamos hacer un refactor
+ *  que una todos o algunos al menos para no repetir tanto código.
+ */
 class ServerAPI {
 
     async post(endpoint, body) {
+        console.debug(`POST ${endpoint}`)
+        console.debug(body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }).then(response => {
+        }).then(response =>
             response.json().then(jsonResponse => {
                 if(!response.ok){
                     throw new Error(jsonResponse.message);
                 }
                 return jsonResponse;
             })
-        })
+        )
         return response;
     }
 
@@ -97,6 +102,26 @@ class ServerAPI {
         return response
     }
 
+    async patch(endpoint, body) {
+        console.debug(`PATCH ${endpoint}`)
+        console.debug(body)
+        let response  = await fetch(endpoint, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => {
+            response.json().then(jsonResponse => {
+                if(!response.ok){
+                    throw new Error(jsonResponse.message)
+                }
+                return jsonResponse
+            })
+        })
+        return response
+    }
+
 
 }
 
@@ -110,12 +135,15 @@ class Requester {
     }
 
     async register(userData) {
-        return this.serverAPI.post(USERS_BASE_ENDPOINT + '/users', {
+        var response = await this.serverAPI.post(USERS_BASE_ENDPOINT + '/users', {
             first_name: userData.name,
             last_name: userData.lastName,
             email: userData.email,
-            password: userData.password
+            password: userData.password,
+            profile_picture: ''
         });
+        console.log(response)
+        return response
     }
 
     async login(userCredentials) {
@@ -140,12 +168,15 @@ class Requester {
 
     async publish(publicationDetails) {
         return this.serverAPI.post(PUBLICATIONS_BASE_ENDPOINT + '/publications', {
-            user_id: 1,
+            user_id: publicationDetails.user_id,
             title: publicationDetails.title,
             description: publicationDetails.description,
             rooms: publicationDetails.rooms,
             beds: publicationDetails.beds,
             bathrooms: publicationDetails.bathrooms,
+            images: [{
+                url: publicationDetails.photoURL[0]
+            }],
             price_per_night: publicationDetails.price_per_night,
             loc: {
               latitude: publicationDetails.coordinates[0],
@@ -194,6 +225,23 @@ class Requester {
         var response =  await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', params)
         console.log(response)
         return response
+    }
+
+    async addQuestion(questionContext) {
+        let resourceEndpoint = `/publications/${questionContext.publicationID}/questions`
+
+        return this.serverAPI.post(PUBLICATIONS_BASE_ENDPOINT + resourceEndpoint, {
+            question: questionContext.question,
+            user_id: questionContext.userID
+        })
+    }
+
+    async addAnswer(answerContext) {
+        let resourceEndpoint = `/publications/${answerContext.publicationID}/questions/${answerContext.questionID}`
+
+        return this.serverAPI.patch(PUBLICATIONS_BASE_ENDPOINT + resourceEndpoint , {
+            reply: answerContext.answer
+        })
     }
 }
 
