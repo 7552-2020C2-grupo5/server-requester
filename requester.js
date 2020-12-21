@@ -147,13 +147,10 @@ class Requester {
     }
 
     async login(userCredentials) {
-        let response = await this.serverAPI.post(USERS_BASE_ENDPOINT + '/login', {
+        let response = await this.serverAPI.post(USERS_BASE_ENDPOINT + '/users/login', {
             email: userCredentials.username,
             password: userCredentials.password,
         });
-        if (!response.id) {
-            response.id = 1;
-        }
         return response;
     }
 
