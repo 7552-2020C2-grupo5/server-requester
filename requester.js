@@ -46,13 +46,14 @@ class API {
  */
 class ServerAPI {
 
-    async post(endpoint, body) {
+    async post(endpoint, body, headers={}) {
         console.debug(`POST ${endpoint}`)
         console.debug(body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                ...headers,
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(body)
         }).then(response =>
@@ -239,6 +240,15 @@ class Requester {
         return this.serverAPI.patch(PUBLICATIONS_BASE_ENDPOINT + resourceEndpoint , {
             reply: answerContext.answer
         })
+    }
+
+    async logout(token) {
+        let response = await this.serverAPI.post(
+            USERS_BASE_ENDPOINT + '/users/logout',
+            {},
+            {Authorization: token}
+        );
+        return response;
     }
 }
 
