@@ -47,8 +47,8 @@ class API {
 class ServerAPI {
 
     async post(endpoint, body, headers={}) {
-        console.debug(`POST ${endpoint}`)
-        console.debug(body)
+//        console.log("POST with")
+//        console.log(body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -104,8 +104,6 @@ class ServerAPI {
     }
 
     async patch(endpoint, body) {
-        console.debug(`PATCH ${endpoint}`)
-        console.debug(body)
         let response  = await fetch(endpoint, {
             method: 'PATCH',
             headers: {
@@ -143,7 +141,6 @@ class Requester {
             password: userData.password,
             profile_picture: ''
         });
-        console.log(response)
         return response
     }
 
@@ -183,6 +180,25 @@ class Requester {
        });
     }
 
+    async updatePublication(publicationDetails) {
+        return this.serverAPI.put(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationDetails.id}`, {
+            title: publicationDetails.title,
+            description: publicationDetails.description,
+            rooms: publicationDetails.rooms,
+            beds: publicationDetails.beds,
+            bathrooms: publicationDetails.bathrooms,
+            images: [{
+                url: publicationDetails.photoURL[0]
+            }],
+            price_per_night: publicationDetails.price_per_night,
+            loc: {
+              latitude: publicationDetails.coordinates[0],
+              longitude: publicationDetails.coordinates[1]
+            }
+        });
+    }
+
+
     reservations() {
         let reservations = []
         for (let i = 0; i < 10; i++) {
@@ -218,10 +234,7 @@ class Requester {
             beds: 0,
             ...searchParams
         }
-        console.log('Searching by params')
-        console.log(params)
         var response =  await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', params)
-        console.log(response)
         return response
     }
 
