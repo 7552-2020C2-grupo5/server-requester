@@ -2,6 +2,7 @@
 const USERS_BASE_ENDPOINT = "https://bookbnb5-users-microservice.herokuapp.com/v1"
 const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1"
 const RESERVATIONS_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1/bookings"
+const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
 
 
 class API {
@@ -262,6 +263,26 @@ class Requester {
             {Authorization: token}
         );
         return response;
+    }
+
+    async userReviews(userData) {
+        return await this.serverAPI.get(REVIEWS_BASE_ENDPOINT + '/user_reviews/reviews',  {
+            reviewee_id: userData.id
+        })
+    }
+
+    async addUserReview(reviewDetails) {
+
+    }
+
+    async publicationReviews(publicationData) {
+        return await this.serverAPI.get(REVIEWS_BASE_ENDPOINT + '/publication_reviews/reviews',  {
+            publication_id: publicationData.id
+        })
+    }
+
+    async addPublicationReview(reviewDetails) {
+
     }
 }
 
