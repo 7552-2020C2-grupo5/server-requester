@@ -1,7 +1,6 @@
-
 const USERS_BASE_ENDPOINT = "https://bookbnb5-users-microservice.herokuapp.com/v1"
 const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1"
-const RESERVATIONS_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1/bookings"
+const RESERVATIONS_BASE_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1"
 const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
 
 
@@ -48,8 +47,8 @@ class API {
 class ServerAPI {
 
     async post(endpoint, body, headers={}) {
-//        console.log("POST with")
-//        console.log(body)
+        console.log("POST with")
+        console.log(body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -200,19 +199,12 @@ class Requester {
     }
 
 
-    reservations() {
-        let reservations = []
-        for (let i = 0; i < 10; i++) {
-            let fake_reservation = {
-                title: 'Reserva',
-                subtitle: 'Paseo Colón',
-                initial_date: new Date("2020-11-21T03:17:52.882Z").toLocaleDateString(),
-                end_date: new Date("2020-12-24T03:17:52.882Z").toLocaleDateString(),
-                publication_id: 5
-            }
-            reservations.push(fake_reservation)
-        }
-        return reservations
+    async reservations(params={}) {
+        return this.serverAPI.get(RESERVATIONS_BASE_ENDPOINT + '/bookings', params)
+    }
+
+    async addReservation(reservationDetails) {
+        return this.serverAPI.post(RESERVATIONS_BASE_ENDPOINT + '/bookings', reservationDetails)
     }
 
     async users() {
