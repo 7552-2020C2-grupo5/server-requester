@@ -269,7 +269,7 @@ class Requester {
             comment: reviewDetails.comment,
             reviewer_id: reviewDetails.reviewer_id,
             reviewee_id: reviewDetails.reviewee_id,
-            booking_id: 2,
+            booking_id: reviewDetails.booking_id,
         })
     }
 
@@ -285,7 +285,7 @@ class Requester {
             comment: reviewDetails.comment,
             reviewer_id: reviewDetails.reviewer_id,
             publication_id: reviewDetails.publication_id,
-            booking_id: 2,
+            booking_id: reviewDetails.booking_id,
         })
     }
 }
