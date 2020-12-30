@@ -1,30 +1,21 @@
 import {SuccessfulApiResponse} from "../responses/generalResponses/SuccessfulApiResponse.js";
+import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 
 export class Endpoint {
-    static url() {
+    url() {
         throw new Error("You have to implement the method");
     }
 
     generalResponses() {
-        return [SuccessfulApiResponse]
+        return [ServerErrorResponse, SuccessfulApiResponse];
     }
 
     ownResponses() {
-        /*
-            Override this in order to provide custom responses
-        "*/
-        return []
+        return [];
     }
 
     responses() {
-        /*
-            Own responses have more precedence over the general responses
-        "*/
-        return this.ownResponses().concat(this.generalResponses())
-    }
-
-    url() {
-        return this.constructor.url();
+        return this.ownResponses().concat(this.generalResponses);
     }
 
     contentType() {

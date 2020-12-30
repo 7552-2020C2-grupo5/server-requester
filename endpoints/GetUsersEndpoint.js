@@ -1,13 +1,14 @@
 import {Endpoint} from "./Endpoint.js";
 import {GetProfileSuccessful} from "../responses/profiles/GetProfileSuccessful.js";
+import {GetUsersSuccessful} from "../responses/users/GetUsersSuccessful";
 
-export class GetProfileEndpoint extends Endpoint {
-    static url() {
-        return '/users/2'
+export class GetUsersEndpoint extends Endpoint {
+    url() {
+        return '/users'
     }
 
     ownResponses() {
-        return [GetProfileSuccessful];
+        return [GetUsersSuccessful];
     }
 
     method() {

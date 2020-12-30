@@ -1,13 +1,17 @@
-import {ErrorApiResponse} from "../generalResponses/ErrorApiResponse";
+import {ErrorResponse} from "../generalResponses/ErrorResponse";
 
-export class InvalidCredentials extends ErrorApiResponse {
+export class InvalidCredentials extends ErrorResponse {
     static defaultResponse() {
         return {
-            "error": "Missing password"
+            "message": "Missing password"
         }
     }
 
-    static errorCodes() {
-        return ["user not found", "Missing email or username", "Missing password"]
+    static understandThis(jsonResponse, httpStatusCode) {
+        return httpStatusCode === 403;
+    }
+
+    description() {
+        return "Credenciales inválidas";
     }
 }

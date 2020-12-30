@@ -2,11 +2,6 @@ import {Requester} from "./Requester.js";
 import {ErrorApiResponse} from "../responses/generalResponses/ErrorApiResponse.js";
 
 class RemoteRequester extends Requester {
-    constructor(url) {
-        super();
-        this._baseUrl = url;
-    }
-
     call({endpoint, onResponse, data = undefined}) {
         const request = this._buildRequest(endpoint, data);
         let url = endpoint.url();
@@ -14,9 +9,11 @@ class RemoteRequester extends Requester {
             url += "?" + this._dataToQueryString(data);
         }
 
-        return fetch(this._baseUrl + url, request).then(result => result.json())
-            .then(jsonResponse => {
-                return onResponse(this._buildSuccessfullResponse(jsonResponse, endpoint));
+        return fetch(url, request).then(response => response.json().then(
+            jsonResponse => {
+                return this._buildResponse(jsonResponse, endpoint, response)
+            })).then(response => {
+                return onResponse(response);
             })
             /***
              * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful
@@ -46,12 +43,11 @@ class RemoteRequester extends Requester {
         return requestOptions;
     }
 
-    _buildSuccessfullResponse(jsonResponse, endpoint) {
+    _buildResponse(jsonResponse, endpoint, response) {
         let endpointResponse;
-
         const availableResponsesForEndpoint = endpoint.responses();
         for (let responseType of availableResponsesForEndpoint) {
-            if (responseType.understandThis(jsonResponse)) {
+            if (responseType.understandThis(jsonResponse, response.status)) {
                 endpointResponse = new responseType(jsonResponse);
                 break;
             } else {

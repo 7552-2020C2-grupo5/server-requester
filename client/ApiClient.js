@@ -1,5 +1,5 @@
-import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse.js";
-import {GetProfileEndpoint} from "../endpoints/GetProfileEndpoint.js";
+import {ErrorResponse} from "../responses/generalResponses/ErrorResponse.js";
+import {GetUsersEndpoint} from "../endpoints/GetUsersEndpoint.js";
 import {LoginEndpoint} from "../endpoints/LoginEndpoint";
 
 
@@ -12,7 +12,7 @@ class ApiClient {
     }
 
     _handleResponse(response, onResponse) {
-        if (response instanceof ServerErrorResponse) {
+        if (response instanceof ErrorResponse) {
             console.log("Server error: ", response);
             return this._handleServerError(response);
         }
@@ -30,7 +30,7 @@ class ApiClient {
 
     getProfile(onResponse) {
         return this._requester.call({
-            endpoint: new GetProfileEndpoint(),
+            endpoint: new GetUsersEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }

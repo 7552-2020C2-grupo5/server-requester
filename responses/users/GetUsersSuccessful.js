@@ -1,6 +1,6 @@
 import {SuccessfulApiResponse} from "../generalResponses/SuccessfulApiResponse.js";
 
-export class GetProfileSuccessful extends SuccessfulApiResponse {
+export class GetUsersSuccessful extends SuccessfulApiResponse {
     static defaultResponse() {
         return {
             "data": {
@@ -15,17 +15,6 @@ export class GetProfileSuccessful extends SuccessfulApiResponse {
                 "url": "http://statuscode.org/",
                 "text": "A weekly newsletter focusing on software development, infrastructure, the server, performance, and the stack end of things."
             }
-        }
-    }
-
-    userPersonalData() {
-        const personalData = this.content()['data'];
-        return {
-            id: personalData['id'],
-            email: personalData['email'],
-            firstName: personalData['first_name'],
-            lastName: personalData['last_name'],
-            avatarUrl: personalData['avatar'],
         }
     }
 }
