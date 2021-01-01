@@ -2,8 +2,16 @@ import {SuccessfulApiResponse} from "../responses/generalResponses/SuccessfulApi
 import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 
 export class Endpoint {
+    constructor(token = undefined) {
+        this._token = token;
+    }
+
     url() {
         throw new Error("You have to implement the method");
+    }
+
+    token() {
+        return this._token;
     }
 
     generalResponses() {
@@ -27,6 +35,6 @@ export class Endpoint {
     }
 
     needsAuthorization() {
-        throw new Error("You have to implement the method");
+        return this._token !== undefined;
     }
 }

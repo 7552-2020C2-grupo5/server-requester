@@ -1,13 +1,15 @@
 import {GetUsersEndpoint} from "../endpoints/GetUsersEndpoint";
-import {GetProfileSuccessful} from "../responses/profiles/GetProfileSuccessful";
 import {LoginEndpoint} from "../endpoints/LoginEndpoint";
 import {LoginSuccessful} from "../responses/login/LoginSuccessful";
-import {InvalidCredentials} from "../responses/login/InvalidCredentials";
+import {GetUsersSuccessful} from "../responses/users/GetUsersSuccessful";
+import {GetUserSuccessful} from "../responses/users/GetUserSuccessful";
+import {GetUserEndpoint} from "../endpoints/GetUserEndpoint";
 
 
 const fakeRequesterExpectedResponses = () => {
     return {
-        [GetUsersEndpoint.name]: GetProfileSuccessful,
+        [GetUsersEndpoint.name]: GetUsersSuccessful,
+        [GetUserEndpoint.name]: GetUserSuccessful,
         [LoginEndpoint.name]: LoginSuccessful,
     }
 };

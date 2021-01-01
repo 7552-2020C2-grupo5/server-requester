@@ -1,5 +1,5 @@
 import {Requester} from "./Requester.js";
-import {ErrorApiResponse} from "../responses/generalResponses/ErrorApiResponse.js";
+import {ErrorResponse} from "../responses/generalResponses/ErrorResponse";
 
 class RemoteRequester extends Requester {
     call({endpoint, onResponse, data = undefined}) {
@@ -44,15 +44,18 @@ class RemoteRequester extends Requester {
     }
 
     _buildResponse(jsonResponse, endpoint, response) {
-        let endpointResponse;
+        let endpointResponse = undefined;
         const availableResponsesForEndpoint = endpoint.responses();
+        const httpStatusCode = response.status;
+        debugger;
         for (let responseType of availableResponsesForEndpoint) {
-            if (responseType.understandThis(jsonResponse, response.status)) {
-                endpointResponse = new responseType(jsonResponse);
+            if (responseType.understandThis(jsonResponse, httpStatusCode)) {
+                endpointResponse = new responseType(jsonResponse, httpStatusCode);
                 break;
-            } else {
-                endpointResponse = new ErrorApiResponse(jsonResponse);
             }
+        }
+        if (endpointResponse === undefined) {
+            throw new Error("This type of response wasn't expected");
         }
 
         return endpointResponse;
@@ -62,6 +65,9 @@ class RemoteRequester extends Requester {
         let headers = {};
         if (endpoint.contentType() && endpoint.contentType() !== "multipart/form-data") {
             headers['Content-Type'] = endpoint.contentType();
+        }
+        if (endpoint.needsAuthorization()) {
+            headers['Authorization'] = endpoint.token();
         }
 
         return headers;

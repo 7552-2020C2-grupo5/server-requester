@@ -1,10 +1,10 @@
 import {Endpoint} from "./Endpoint.js";
-import {GetProfileSuccessful} from "../responses/profiles/GetProfileSuccessful.js";
 import {GetUsersSuccessful} from "../responses/users/GetUsersSuccessful";
+import {USERS_BASE_ENDPOINT} from "../requester";
 
 export class GetUsersEndpoint extends Endpoint {
     url() {
-        return '/users'
+        return USERS_BASE_ENDPOINT + '/users';
     }
 
     ownResponses() {
@@ -12,10 +12,6 @@ export class GetUsersEndpoint extends Endpoint {
     }
 
     method() {
-        return 'GET'
-    }
-
-    needsAuthorization() {
-        return false;
+        return 'GET';
     }
 }

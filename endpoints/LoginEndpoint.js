@@ -4,7 +4,7 @@ import {InvalidCredentials} from "../responses/login/InvalidCredentials";
 
 export class LoginEndpoint extends Endpoint {
     url() {
-        return '/login'
+        return '/login';
     }
 
     ownResponses() {
@@ -12,10 +12,6 @@ export class LoginEndpoint extends Endpoint {
     }
 
     method() {
-        return 'POST'
-    }
-
-    needsAuthorization() {
-        return false;
+        return 'POST';
     }
 }

@@ -10,6 +10,6 @@ export class ErrorResponse extends ApiResponse {
     }
 
     description() {
-        throw new Error("You have to implement the method");
+        return "Ha ocurrido un error!";
     }
 }

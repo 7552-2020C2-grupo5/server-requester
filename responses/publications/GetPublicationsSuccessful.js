@@ -1,6 +1,6 @@
 import {SuccessfulApiResponse} from "../generalResponses/SuccessfulApiResponse.js";
 
-export class GetUsersSuccessful extends SuccessfulApiResponse {
+export class GetPublicationsSuccessful extends SuccessfulApiResponse {
     static defaultResponse() {
         return [
             {

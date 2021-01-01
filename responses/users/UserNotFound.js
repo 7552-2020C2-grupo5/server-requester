@@ -1,17 +1,17 @@
 import {ErrorResponse} from "../generalResponses/ErrorResponse";
 
-export class InvalidCredentials extends ErrorResponse {
+export class UserNotFound extends ErrorResponse {
     static defaultResponse() {
         return {
-            "message": "Missing password"
+            "message": "User not found"
         }
     }
 
     static understandThis(jsonResponse, httpStatusCode) {
-        return httpStatusCode === 401;
+        return httpStatusCode === 404;
     }
 
     description() {
-        return "Credenciales inválidas";
+        return "No existe el usuario indicado.";
     }
 }

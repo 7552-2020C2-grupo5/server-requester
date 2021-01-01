@@ -1,17 +1,17 @@
 import {ErrorResponse} from "../generalResponses/ErrorResponse";
 
-export class InvalidCredentials extends ErrorResponse {
+export class UserIsBlocked extends ErrorResponse {
     static defaultResponse() {
         return {
-            "message": "Missing password"
+            "message": "User is blocked"
         }
     }
 
     static understandThis(jsonResponse, httpStatusCode) {
-        return httpStatusCode === 401;
+        return httpStatusCode === 403;
     }
 
     description() {
-        return "Credenciales inválidas";
+        return "El usuario se encuentra bloqueado.";
     }
 }
