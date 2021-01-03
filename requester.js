@@ -68,6 +68,7 @@ class ServerAPI {
     }
 
     async get(endpoint, params={}) {
+        console.log("GET with %s", params)
         let encodedParams = [];
         Object.entries(params).map(([key, value]) => {
             if (value != "") {
@@ -237,13 +238,7 @@ export class Requester {
     }
 
     //Deberia ir directo en el publications no? Es el mismo pedido
-    async searchPublications(searchParams={}) {
-        var params = {
-            bathrooms: 0,
-            rooms: 0,
-            beds: 0,
-            ...searchParams
-        }
+    async searchPublications(params={}) {
         var response =  await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', params)
         return response
     }
