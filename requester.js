@@ -121,13 +121,30 @@ class ServerAPI {
         return response
     }
 
+    async delete(endpoint, body) {
+        let response  = await fetch(endpoint, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => {
+            response.json().then(jsonResponse => {
+                if(!response.ok){
+                    throw new Error(jsonResponse.message)
+                }
+                return jsonResponse
+            })
+        })
+        return response
+    }
 
 }
 
 
 // TODO: esto habría que refactorizarlo. Deberian llamarse al revés, el requester es el que hace los pedidos
 // y la api el que maneja a que endpoint le pega, con que data, etc.
-class Requester {
+export class Requester {
 
     constructor() {
         this.serverAPI = new ServerAPI()
@@ -288,6 +305,22 @@ class Requester {
             booking_id: reviewDetails.booking_id,
         })
     }
-}
 
-export { Requester }
+    async getStarPublication(userID, publicationID) {
+        return this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
+    }
+
+    async starPublication(userID, publicationID) {
+        return this.serverAPI.post(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
+    }
+
+    async unstarPublication(userID, publicationID) {
+        return this.serverAPI.delete(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
+    }
+}
