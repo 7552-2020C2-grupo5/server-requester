@@ -1,8 +1,9 @@
-import {ErrorResponse} from "../responses/generalResponses/ErrorResponse.js";
 import {GetUsersEndpoint} from "../endpoints/GetUsersEndpoint.js";
 import {LoginEndpoint} from "../endpoints/LoginEndpoint";
 import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 import {GetUserEndpoint} from "../endpoints/GetUserEndpoint";
+import {GetPublicationsEndpoint} from "../endpoints/GetPublicationsEndpoint";
+import {GetPublicationEndpoint} from "../endpoints/GetPublicationEndpoint";
 
 
 class ApiClient {
@@ -41,6 +42,21 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetUserEndpoint(userId),
             onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    publications(onResponse, filters={})  {
+        return this._requester.call({
+            endpoint: new GetPublicationsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    getPublication(publicationId, onResponse)  {
+        return this._requester.call({
+            endpoint: new GetPublicationEndpoint(publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 }

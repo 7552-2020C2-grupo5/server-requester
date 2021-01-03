@@ -23,7 +23,7 @@ export class Endpoint {
     }
 
     responses() {
-        return this.ownResponses().concat(this.generalResponses);
+        return this.ownResponses().concat(this.generalResponses());
     }
 
     contentType() {

@@ -5,7 +5,7 @@ class RemoteRequester extends Requester {
     call({endpoint, onResponse, data = undefined}) {
         const request = this._buildRequest(endpoint, data);
         let url = endpoint.url();
-        if (endpoint.method() === 'GET' && data) {
+        if (endpoint.method() === 'GET' && this._hasQueryStringArguments(data)) {
             url += "?" + this._dataToQueryString(data);
         }
 
@@ -28,6 +28,10 @@ class RemoteRequester extends Requester {
             })
     }
 
+    _hasQueryStringArguments(data) {
+        return data && Object.keys(data).length > 0;
+    }
+
     _buildRequest(endpoint, data) {
         let headers = this._buildHeadersFor(endpoint);
         let requestOptions = {
@@ -47,7 +51,6 @@ class RemoteRequester extends Requester {
         let endpointResponse = undefined;
         const availableResponsesForEndpoint = endpoint.responses();
         const httpStatusCode = response.status;
-        debugger;
         for (let responseType of availableResponsesForEndpoint) {
             if (responseType.understandThis(jsonResponse, httpStatusCode)) {
                 endpointResponse = new responseType(jsonResponse, httpStatusCode);
@@ -63,7 +66,8 @@ class RemoteRequester extends Requester {
 
     _buildHeadersFor(endpoint) {
         let headers = {};
-        if (endpoint.contentType() && endpoint.contentType() !== "multipart/form-data") {
+        if (endpoint.contentType() && endpoint.contentType() !== "multipart/form-data"
+            && endpoint.method() !== 'GET') {
             headers['Content-Type'] = endpoint.contentType();
         }
         if (endpoint.needsAuthorization()) {
