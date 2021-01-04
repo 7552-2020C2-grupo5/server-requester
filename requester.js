@@ -47,8 +47,7 @@ class API {
 class ServerAPI {
 
     async post(endpoint, body, headers={}) {
-        console.log("POST with")
-        console.log(body)
+        console.log("POST %s with %s", endpoint, body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -68,7 +67,7 @@ class ServerAPI {
     }
 
     async get(endpoint, params={}) {
-        console.log("GET with %s", params)
+        console.log("GET %s with %s", endpoint, params)
         let encodedParams = [];
         Object.entries(params).map(([key, value]) => {
             if (value != "") {
