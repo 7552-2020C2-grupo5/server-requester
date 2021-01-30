@@ -4,6 +4,9 @@ import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResp
 import {GetUserEndpoint} from "../endpoints/GetUserEndpoint";
 import {GetPublicationsEndpoint} from "../endpoints/GetPublicationsEndpoint";
 import {GetPublicationEndpoint} from "../endpoints/GetPublicationEndpoint";
+import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
+import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
+import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 
 
 class ApiClient {
@@ -45,6 +48,20 @@ class ApiClient {
         });
     }
 
+    getAdmins(onResponse) {
+        return this._requester.call({
+            endpoint: new GetAdminsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    getAdminProfile(adminId, onResponse) {
+        return this._requester.call({
+            endpoint: new GetAdminEndpoint(adminId),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
     publications(onResponse, filters={})  {
         return this._requester.call({
             endpoint: new GetPublicationsEndpoint(),
@@ -56,6 +73,13 @@ class ApiClient {
     getPublication(publicationId, onResponse)  {
         return this._requester.call({
             endpoint: new GetPublicationEndpoint(publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    blockPublication(publicationId, onResponse)  {
+        return this._requester.call({
+            endpoint: new BlockPublicationEndpoint(publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
