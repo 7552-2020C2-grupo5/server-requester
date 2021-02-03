@@ -49,7 +49,7 @@ class RemoteRequester extends Requester {
 
     _buildResponse(jsonResponse, endpoint, response) {
         let endpointResponse = undefined;
-        const availableResponsesForEndpoint = endpoint.responses();
+        const availableResponsesForEndpoint = endpoint.ownResponses();
         const httpStatusCode = response.status;
         for (let responseType of availableResponsesForEndpoint) {
             if (responseType.understandThis(jsonResponse, httpStatusCode)) {

@@ -1,5 +1,6 @@
 import {GetUsersEndpoint} from "../endpoints/GetUsersEndpoint.js";
-import {LoginEndpoint} from "../endpoints/LoginEndpoint";
+import {UserLoginEndpoint} from "../endpoints/UserLoginEndpoint";
+import {UserLogoutEndpoint} from "../endpoints/UserLogoutEndpoint";
 import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 import {GetUserEndpoint} from "../endpoints/GetUserEndpoint";
 import {GetPublicationsEndpoint} from "../endpoints/GetPublicationsEndpoint";
@@ -7,6 +8,7 @@ import {GetPublicationEndpoint} from "../endpoints/GetPublicationEndpoint";
 import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
+import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
 
 
 class ApiClient {
@@ -26,11 +28,18 @@ class ApiClient {
         return onResponse(response);
     }
 
-    login(data, onResponse) {
+    userLogin(data, onResponse) {
         return this._requester.call({
-            endpoint: new LoginEndpoint(),
+            endpoint: new UserLoginEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
+        });
+    }
+
+    userLogout(token, onResponse) {
+        return this._requester.call({
+            endpoint: new UserLogoutEndpoint(token),
+            onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
 
@@ -38,12 +47,20 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetUsersEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse)
-        });
+       });
     }
 
     profileData(userId, onResponse) {
         return this._requester.call({
             endpoint: new GetUserEndpoint(userId),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    updateProfileData(userId, userData, onResponse) {
+        return this._requester.call({
+            endpoint: new UpdateUserEndpoint(userId, userData),
+            data: userData,
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
