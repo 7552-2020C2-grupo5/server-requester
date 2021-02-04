@@ -13,6 +13,8 @@ import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint"
 import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
 import {GetBookingsEndpoint} from "../endpoints/GetBookingsEndpoint";
 import {PostBookingEndpoint} from "../endpoints/PostBookingEndpoint";
+import {PostPublicationQuestionEndpoint} from "../endpoints/PostPublicationQuestionEndpoint";
+import {PostPublicationAnswerEndpoint} from "../endpoints/PostPublicationAnswerEndpoint";
 
 
 class ApiClient {
@@ -167,6 +169,22 @@ class ApiClient {
             endpoint: new PostBookingEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: reservationDetails
+        });
+    }
+
+    addQuestion(publicationId, questionDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostPublicationQuestionEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: questionDetails
+        });
+    }
+
+    addAnswer(publicationId, questionId, answerDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostPublicationAnswerEndpoint(null, publicationId, questionId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: answerDetails
         });
     }
 }
