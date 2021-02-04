@@ -9,6 +9,10 @@ import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
+import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint";
+import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
+import {GetBookingsEndpoint} from "../endpoints/GetBookingsEndpoint";
+import {PostBookingEndpoint} from "../endpoints/PostBookingEndpoint";
 
 
 class ApiClient {
@@ -94,10 +98,75 @@ class ApiClient {
         });
     }
 
+    updatePublication(publicationId, publicationDetails, onResponse) {
+        // TODO. refactor
+        let data = {
+            title: publicationDetails.title,
+            description: publicationDetails.description,
+            rooms: publicationDetails.rooms,
+            beds: publicationDetails.beds,
+            bathrooms: publicationDetails.bathrooms,
+            images: [{
+                url: publicationDetails.photoURL[0]
+            }],
+            price_per_night: publicationDetails.price_per_night,
+            loc: {
+              latitude: publicationDetails.coordinates[0],
+              longitude: publicationDetails.coordinates[1]
+            }
+        };
+        return this._requester.call({
+            endpoint: new UpdatePublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    postPublication(publicationDetails, onResponse) {
+        // TODO. refactor
+        let data =  {
+            user_id: publicationDetails.user_id,
+            title: publicationDetails.title,
+            description: publicationDetails.description,
+            rooms: publicationDetails.rooms,
+            beds: publicationDetails.beds,
+            bathrooms: publicationDetails.bathrooms,
+            images: [{
+                url: publicationDetails.photoURL[0]
+            }],
+            price_per_night: publicationDetails.price_per_night,
+            loc: {
+              latitude: publicationDetails.coordinates[0],
+              longitude: publicationDetails.coordinates[1]
+            }
+        };
+        return this._requester.call({
+            endpoint: new PostPublicationEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
     blockPublication(publicationId, onResponse)  {
         return this._requester.call({
             endpoint: new BlockPublicationEndpoint(publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    bookings(filters = {}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetBookingsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    makeReservation(reservationDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostBookingEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reservationDetails
         });
     }
 }
