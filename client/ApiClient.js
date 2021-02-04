@@ -15,6 +15,10 @@ import {GetBookingsEndpoint} from "../endpoints/GetBookingsEndpoint";
 import {PostBookingEndpoint} from "../endpoints/PostBookingEndpoint";
 import {PostPublicationQuestionEndpoint} from "../endpoints/PostPublicationQuestionEndpoint";
 import {PostPublicationAnswerEndpoint} from "../endpoints/PostPublicationAnswerEndpoint";
+import {StarPublicationEndpoint} from "../endpoints/StarPublicationEndpoint";
+import {UnstarPublicationEndpoint} from "../endpoints/UnstarPublicationEndpoint";
+import {GetPublicationStarsEndpoint} from "../endpoints/GetPublicationStarsEndpoint";
+import {PostUserEndpoint} from "../endpoints/PostUserEndpoint";
 
 
 class ApiClient {
@@ -32,6 +36,14 @@ class ApiClient {
         }
 
         return onResponse(response);
+    }
+
+    register(userDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostUserEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: userDetails
+        });
     }
 
     userLogin(data, onResponse) {
@@ -185,6 +197,29 @@ class ApiClient {
             endpoint: new PostPublicationAnswerEndpoint(null, publicationId, questionId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: answerDetails
+        });
+    }
+
+    starPublication(publicationId, userId, onResponse) {
+        return this._requester.call({
+            endpoint: new StarPublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
+        });
+    }
+
+    unstarPublication(publicationId, userId, onResponse) {
+       return this._requester.call({
+            endpoint: new UnstarPublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
+        });
+    }
+
+    getPublicationStars(publicationId, userId, onResponse) {
+        return this._requester.call({
+            endpoint: new GetPublicationStarsEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 }
