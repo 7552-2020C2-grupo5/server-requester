@@ -118,51 +118,18 @@ class ApiClient {
     }
 
     updatePublication(publicationId, publicationDetails, onResponse) {
-        // TODO. refactor
-        let data = {
-            title: publicationDetails.title,
-            description: publicationDetails.description,
-            rooms: publicationDetails.rooms,
-            beds: publicationDetails.beds,
-            bathrooms: publicationDetails.bathrooms,
-            images: [{
-                url: publicationDetails.photoURL[0]
-            }],
-            price_per_night: publicationDetails.price_per_night,
-            loc: {
-              latitude: publicationDetails.coordinates[0],
-              longitude: publicationDetails.coordinates[1]
-            }
-        };
         return this._requester.call({
             endpoint: new UpdatePublicationEndpoint(null, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
-            data: data
+            data: publicationDetails
         });
     }
 
     postPublication(publicationDetails, onResponse) {
-        // TODO. refactor
-        let data =  {
-            user_id: publicationDetails.user_id,
-            title: publicationDetails.title,
-            description: publicationDetails.description,
-            rooms: publicationDetails.rooms,
-            beds: publicationDetails.beds,
-            bathrooms: publicationDetails.bathrooms,
-            images: [{
-                url: publicationDetails.photoURL[0]
-            }],
-            price_per_night: publicationDetails.price_per_night,
-            loc: {
-              latitude: publicationDetails.coordinates[0],
-              longitude: publicationDetails.coordinates[1]
-            }
-        };
         return this._requester.call({
             endpoint: new PostPublicationEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
-            data: data
+            data: publicationDetails
         });
     }
 
