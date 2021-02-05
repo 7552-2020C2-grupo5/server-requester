@@ -9,8 +9,11 @@ class RemoteRequester extends Requester {
             url += "?" + this._dataToQueryString(data);
         }
 
+        console.log('Making request to %s with %s', url, request)
         return fetch(url, request).then(response => response.json().then(
             jsonResponse => {
+                console.log('Response is %s', jsonResponse)
+                console.log('with code %s', response.status)
                 return this._buildResponse(jsonResponse, endpoint, response)
             })).then(response => {
                 return onResponse(response);

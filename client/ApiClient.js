@@ -19,6 +19,11 @@ import {StarPublicationEndpoint} from "../endpoints/StarPublicationEndpoint";
 import {UnstarPublicationEndpoint} from "../endpoints/UnstarPublicationEndpoint";
 import {GetPublicationStarsEndpoint} from "../endpoints/GetPublicationStarsEndpoint";
 import {PostUserEndpoint} from "../endpoints/PostUserEndpoint";
+import {GetUserReviewsEndpoint} from "../endpoints/GetUserReviewsEndpoint";
+import {GetPublicationReviewsEndpoint} from "../endpoints/GetPublicationReviewsEndpoint";
+import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
+import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
+
 
 
 class ApiClient {
@@ -220,6 +225,38 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetPublicationStarsEndpoint(null, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    publicationReviews(filters={}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetPublicationReviewsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    userReviews(filters={}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetUserReviewsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    addPublicationReview(reviewDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new AddPublicationReviewEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reviewDetails
+        });
+    }
+
+    addUserReview(reviewDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new AddUserReviewEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reviewDetails
         });
     }
 }
