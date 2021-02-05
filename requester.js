@@ -147,7 +147,7 @@ class ServerAPI {
 export class Requester {
 
     constructor() {
-        this.serverAPI = new ServerAPI()
+        throw new Error("[DEPRECATION] Unable to instantiate this class")
     }
 
     async register(userData) {
