@@ -192,6 +192,7 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetPublicationStarsEndpoint(null, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
         });
     }
 
