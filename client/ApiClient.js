@@ -7,6 +7,7 @@ import {GetPublicationEndpoint} from "../endpoints/GetPublicationEndpoint";
 import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
+import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
 
 
 class ApiClient {
@@ -45,6 +46,13 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetUserEndpoint(userId),
             onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    blockUser(userId, onResponse)  {
+        return this._requester.call({
+            endpoint: new BlockUserEndpoint(userId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 
