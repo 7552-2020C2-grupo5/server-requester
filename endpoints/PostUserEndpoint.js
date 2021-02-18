@@ -1,14 +1,15 @@
 import {Endpoint} from "./Endpoint.js";
-import {USERS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PostUserSuccessful} from "../responses/users/PostUserSuccessful";
+import {PostUserAlreadyRegistered} from "../responses/users/PostUserAlreadyRegistered";
 
 export class PostUserEndpoint extends Endpoint {
     url() {
-        return USERS_BASE_ENDPOINT + '/users'
+        return MIDDLEWARE_BASE_ENDPOINT + '/users/'
     }
 
     ownResponses() {
-        return [PostUserSuccessful];
+        return [PostUserSuccessful], PostUserAlreadyRegistered;
     }
 
     method() {

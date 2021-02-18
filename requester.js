@@ -2,48 +2,9 @@ export const USERS_BASE_ENDPOINT = "https://bookbnb5-users-microservice.herokuap
 export const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1"
 export const RESERVATIONS_BASE_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1"
 export const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
+export const MIDDLEWARE_BASE_ENDPOINT = "https://bookbnb5-middleware.herokuapp.com/bookbnb"
 
 
-class API {
-    async post(endpoint, body){
-        return new Promise((resolve, refuse) => {
-            setTimeout(() => {
-                console.log('Making POST with ')
-                console.log(endpoint)
-                console.log(body)
-                resolve()
-            }, 1000)
-        })
-    }
-
-    async get(endpoint, params={}) {
-        return new Promise((resolve, refuse) => {
-            setTimeout(() => {
-                console.log('Making GET with ')
-                console.log(endpoint)
-                console.log(params)
-                resolve()
-            }, 1000)
-        })
-    }
-
-    async put(endpoint, body) {
-        return new Promise((resolve, refuse) => {
-            setTimeout(() => {
-                console.log('Making PUT with ')
-                console.log(endpoint)
-                console.log(body)
-                resolve()
-            }, 1000)
-        })
-    }
-}
-
-
-
-/*  La mayoría de los métodos hacen lo mismo (un fetch) podríamos hacer un refactor
- *  que una todos o algunos al menos para no repetir tanto código.
- */
 class ServerAPI {
 
     async post(endpoint, body, headers={}) {
