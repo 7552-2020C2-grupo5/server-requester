@@ -1,5 +1,6 @@
 import {GetUsersEndpoint} from "../endpoints/GetUsersEndpoint.js";
-import {LoginEndpoint} from "../endpoints/LoginEndpoint";
+import {UserLoginEndpoint} from "../endpoints/UserLoginEndpoint";
+import {UserLogoutEndpoint} from "../endpoints/UserLogoutEndpoint";
 import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 import {GetUserEndpoint} from "../endpoints/GetUserEndpoint";
 import {GetPublicationsEndpoint} from "../endpoints/GetPublicationsEndpoint";
@@ -9,6 +10,22 @@ import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
 import {LoginAdminEndpoint} from "../endpoints/LoginAdmin";
+import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
+import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint";
+import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
+import {GetBookingsEndpoint} from "../endpoints/GetBookingsEndpoint";
+import {PostBookingEndpoint} from "../endpoints/PostBookingEndpoint";
+import {PostPublicationQuestionEndpoint} from "../endpoints/PostPublicationQuestionEndpoint";
+import {PostPublicationAnswerEndpoint} from "../endpoints/PostPublicationAnswerEndpoint";
+import {StarPublicationEndpoint} from "../endpoints/StarPublicationEndpoint";
+import {UnstarPublicationEndpoint} from "../endpoints/UnstarPublicationEndpoint";
+import {GetPublicationStarsEndpoint} from "../endpoints/GetPublicationStarsEndpoint";
+import {PostUserEndpoint} from "../endpoints/PostUserEndpoint";
+import {GetUserReviewsEndpoint} from "../endpoints/GetUserReviewsEndpoint";
+import {GetPublicationReviewsEndpoint} from "../endpoints/GetPublicationReviewsEndpoint";
+import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
+import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
+
 
 
 class ApiClient {
@@ -28,11 +45,26 @@ class ApiClient {
         return onResponse(response);
     }
 
-    login(data, onResponse) {
+    register(userDetails, onResponse) {
         return this._requester.call({
-            endpoint: new LoginEndpoint(),
+            endpoint: new PostUserEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: userDetails
+        });
+    }
+
+    userLogin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new UserLoginEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
+        });
+    }
+
+    userLogout(token, onResponse) {
+        return this._requester.call({
+            endpoint: new UserLogoutEndpoint(token),
+            onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
 
@@ -40,12 +72,20 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetUsersEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse)
-        });
+       });
     }
 
     profileData(userId, onResponse) {
         return this._requester.call({
             endpoint: new GetUserEndpoint(userId),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    updateProfileData(userId, userData, onResponse) {
+        return this._requester.call({
+            endpoint: new UpdateUserEndpoint(userId, userData),
+            data: userData,
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
@@ -86,6 +126,22 @@ class ApiClient {
         });
     }
 
+    updatePublication(publicationId, publicationDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new UpdatePublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: publicationDetails
+        });
+    }
+
+    postPublication(publicationDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostPublicationEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: publicationDetails
+        });
+    }
+
     blockPublication(publicationId, onResponse)  {
         return this._requester.call({
             endpoint: new BlockPublicationEndpoint(publicationId),
@@ -98,6 +154,94 @@ class ApiClient {
             endpoint: new LoginAdminEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
+        });
+    }
+
+    bookings(filters = {}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetBookingsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    makeReservation(reservationDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostBookingEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reservationDetails
+        });
+    }
+
+    addQuestion(publicationId, questionDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostPublicationQuestionEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: questionDetails
+        });
+    }
+
+    addAnswer(publicationId, questionId, answerDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new PostPublicationAnswerEndpoint(null, publicationId, questionId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: answerDetails
+        });
+    }
+
+    starPublication(publicationId, userId, onResponse) {
+        return this._requester.call({
+            endpoint: new StarPublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
+        });
+    }
+
+    unstarPublication(publicationId, userId, onResponse) {
+       return this._requester.call({
+            endpoint: new UnstarPublicationEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
+        });
+    }
+
+    getPublicationStars(publicationId, userId, onResponse) {
+        return this._requester.call({
+            endpoint: new GetPublicationStarsEndpoint(null, publicationId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {user_id: userId}
+        });
+    }
+
+    publicationReviews(filters={}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetPublicationReviewsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    userReviews(filters={}, onResponse) {
+        return this._requester.call({
+            endpoint: new GetUserReviewsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
+        });
+    }
+
+    addPublicationReview(reviewDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new AddPublicationReviewEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reviewDetails
+        });
+    }
+
+    addUserReview(reviewDetails, onResponse) {
+        return this._requester.call({
+            endpoint: new AddUserReviewEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: reviewDetails
         });
     }
 }

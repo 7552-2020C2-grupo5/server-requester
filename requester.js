@@ -1,8 +1,7 @@
-
 export const USERS_BASE_ENDPOINT = "https://bookbnb5-users-microservice.herokuapp.com/v1"
 export const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokuapp.com/v1"
-const RESERVATIONS_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1/bookings"
-const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
+export const RESERVATIONS_BASE_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1"
+export const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
 
 
 class API {
@@ -48,8 +47,7 @@ class API {
 class ServerAPI {
 
     async post(endpoint, body, headers={}) {
-//        console.log("POST with")
-//        console.log(body)
+        console.log("POST %s with %s", endpoint, body)
         let response  = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -69,6 +67,7 @@ class ServerAPI {
     }
 
     async get(endpoint, params={}) {
+        console.log("GET %s with %s", endpoint, params)
         let encodedParams = [];
         Object.entries(params).map(([key, value]) => {
             if (value != "") {
@@ -122,16 +121,33 @@ class ServerAPI {
         return response
     }
 
+    async delete(endpoint, body) {
+        let response  = await fetch(endpoint, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(response => {
+            response.json().then(jsonResponse => {
+                if(!response.ok){
+                    throw new Error(jsonResponse.message)
+                }
+                return jsonResponse
+            })
+        })
+        return response
+    }
 
 }
 
 
 // TODO: esto habría que refactorizarlo. Deberian llamarse al revés, el requester es el que hace los pedidos
 // y la api el que maneja a que endpoint le pega, con que data, etc.
-class Requester {
+export class Requester {
 
     constructor() {
-        this.serverAPI = new ServerAPI()
+        throw new Error("[DEPRECATION] Unable to instantiate this class")
     }
 
     async register(userData) {
@@ -200,19 +216,12 @@ class Requester {
     }
 
 
-    reservations() {
-        let reservations = []
-        for (let i = 0; i < 10; i++) {
-            let fake_reservation = {
-                title: 'Reserva',
-                subtitle: 'Paseo Colón',
-                initial_date: new Date("2020-11-21T03:17:52.882Z").toLocaleDateString(),
-                end_date: new Date("2020-12-24T03:17:52.882Z").toLocaleDateString(),
-                publication_id: 5
-            }
-            reservations.push(fake_reservation)
-        }
-        return reservations
+    async reservations(params={}) {
+        return this.serverAPI.get(RESERVATIONS_BASE_ENDPOINT + '/bookings', params)
+    }
+
+    async addReservation(reservationDetails) {
+        return this.serverAPI.post(RESERVATIONS_BASE_ENDPOINT + '/bookings', reservationDetails)
     }
 
     async users() {
@@ -228,13 +237,7 @@ class Requester {
     }
 
     //Deberia ir directo en el publications no? Es el mismo pedido
-    async searchPublications(searchParams={}) {
-        var params = {
-            bathrooms: 0,
-            rooms: 0,
-            beds: 0,
-            ...searchParams
-        }
+    async searchPublications(params={}) {
         var response =  await this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + '/publications', params)
         return response
     }
@@ -272,7 +275,13 @@ class Requester {
     }
 
     async addUserReview(reviewDetails) {
-
+        return await this.serverAPI.post(REVIEWS_BASE_ENDPOINT + '/user_reviews/reviews', {
+            score: reviewDetails.score,
+            comment: reviewDetails.comment,
+            reviewer_id: reviewDetails.reviewer_id,
+            reviewee_id: reviewDetails.reviewee_id,
+            booking_id: reviewDetails.booking_id,
+        })
     }
 
     async publicationReviews(publicationData) {
@@ -282,8 +291,30 @@ class Requester {
     }
 
     async addPublicationReview(reviewDetails) {
+        return await this.serverAPI.post(REVIEWS_BASE_ENDPOINT + '/publication_reviews/reviews', {
+            score: reviewDetails.score,
+            comment: reviewDetails.comment,
+            reviewer_id: reviewDetails.reviewer_id,
+            publication_id: reviewDetails.publication_id,
+            booking_id: reviewDetails.booking_id,
+        })
+    }
 
+    async getStarPublication(userID, publicationID) {
+        return this.serverAPI.get(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
+    }
+
+    async starPublication(userID, publicationID) {
+        return this.serverAPI.post(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
+    }
+
+    async unstarPublication(userID, publicationID) {
+        return this.serverAPI.delete(PUBLICATIONS_BASE_ENDPOINT + `/publications/${publicationID}/star`, {
+            user_id: userID
+        })
     }
 }
-
-export { Requester }

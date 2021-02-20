@@ -8,8 +8,11 @@ class RemoteRequester extends Requester {
             url += "?" + this._dataToQueryString(data);
         }
 
+        console.log('Making request to %s with %s', url, request)
         return fetch(url, request).then(response => response.json().then(
             jsonResponse => {
+                console.log('Response is %s', jsonResponse)
+                console.log('with code %s', response.status)
                 return this._buildResponse(jsonResponse, endpoint, response)
             })).then(response => {
                 return onResponse(response);
@@ -48,7 +51,7 @@ class RemoteRequester extends Requester {
 
     _buildResponse(jsonResponse, endpoint, response) {
         let endpointResponse = undefined;
-        const availableResponsesForEndpoint = endpoint.responses();
+        const availableResponsesForEndpoint = endpoint.ownResponses();
         const httpStatusCode = response.status;
         for (let responseType of availableResponsesForEndpoint) {
             if (responseType.understandThis(jsonResponse, httpStatusCode)) {
