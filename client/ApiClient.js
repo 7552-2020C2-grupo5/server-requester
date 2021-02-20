@@ -23,7 +23,7 @@ import {GetUserReviewsEndpoint} from "../endpoints/GetUserReviewsEndpoint";
 import {GetPublicationReviewsEndpoint} from "../endpoints/GetPublicationReviewsEndpoint";
 import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
 import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
-
+import {RecoverPasswordEndpoint} from "../endpoints/RecoverPasswordEndpoint";
 
 
 class ApiClient {
@@ -225,6 +225,14 @@ class ApiClient {
             endpoint: new AddUserReviewEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: reviewDetails
+        });
+    }
+
+    resetPassword(recoverEmail, onResponse) {
+        return this._requester.call({
+            endpoint: new RecoverPasswordEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {email: recoverEmail}
         });
     }
 }

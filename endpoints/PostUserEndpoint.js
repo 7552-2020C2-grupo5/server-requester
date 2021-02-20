@@ -9,7 +9,7 @@ export class PostUserEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [PostUserSuccessful], PostUserAlreadyRegistered;
+        return [PostUserSuccessful, PostUserAlreadyRegistered];
     }
 
     method() {
