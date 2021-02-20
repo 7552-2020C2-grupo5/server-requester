@@ -8,11 +8,10 @@ class RemoteRequester extends Requester {
             url += "?" + this._dataToQueryString(data);
         }
 
-        console.log('Making request to %s with %s', url, request)
+        console.log('Request: %s with %s', url, request)
         return fetch(url, request).then(response => response.json().then(
             jsonResponse => {
-                console.log('Response is %s', jsonResponse)
-                console.log('with code %s', response.status)
+                console.log('Response: %s with body %s', response.status, jsonResponse)
                 return this._buildResponse(jsonResponse, endpoint, response)
             })).then(response => {
                 return onResponse(response);
@@ -26,6 +25,7 @@ class RemoteRequester extends Requester {
              *
              ***/
             .catch(exception => {
+                //TODO. podríamos levantar hacer una response genérica que handlee los 500
                 console.log("Exception in API request: ", exception);
             })
     }
