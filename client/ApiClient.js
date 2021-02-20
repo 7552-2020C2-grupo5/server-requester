@@ -26,6 +26,7 @@ import {GetPublicationReviewsEndpoint} from "../endpoints/GetPublicationReviewsE
 import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
 import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
 import {RecoverPasswordEndpoint} from "../endpoints/RecoverPasswordEndpoint";
+import {GetWalletBalanceEndpoint} from "../endpoints/GetWalletBalanceEndpoint";
 
 
 class ApiClient {
@@ -250,6 +251,13 @@ class ApiClient {
             endpoint: new RecoverPasswordEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {email: recoverEmail}
+        });
+    }
+
+    walletBalance(walletAddress, onResponse) {
+        return this._requester.call({
+            endpoint: new GetWalletBalanceEndpoint(null, walletAddress),
+            onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 }
