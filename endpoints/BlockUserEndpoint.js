@@ -1,9 +1,9 @@
 import {Endpoint} from "./Endpoint.js";
-import {PUBLICATIONS_BASE_ENDPOINT, USERS_BASE_ENDPOINT} from "../requester";
-import {PublicationIsBlocked} from "../responses/publications/PublicationIsBlocked";
-import {PublicationBlockedSuccessful} from "../responses/publications/PublicationBlockedSuccessful";
+import {USERS_BASE_ENDPOINT} from "../requester";
+import {UserIsBlocked} from "../responses/users/UserIsBlocked";
+import {UserBlockedSuccessful} from "../responses/users/UserBlockedSuccessful";
 
-export class BlockPublicationEndpoint extends Endpoint {
+export class BlockUserEndpoint extends Endpoint {
     constructor(userId) {
         super();
         this._userId = userId;
@@ -14,7 +14,7 @@ export class BlockPublicationEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [PublicationBlockedSuccessful, PublicationIsBlocked];
+        return [UserBlockedSuccessful, UserIsBlocked];
     }
 
     method() {

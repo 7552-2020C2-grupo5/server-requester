@@ -8,6 +8,8 @@ import {GetPublicationEndpoint} from "../endpoints/GetPublicationEndpoint";
 import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
+import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
+import {LoginAdminEndpoint} from "../endpoints/LoginAdmin";
 import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
 import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint";
 import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
@@ -88,6 +90,13 @@ class ApiClient {
         });
     }
 
+    blockUser(userId, onResponse)  {
+        return this._requester.call({
+            endpoint: new BlockUserEndpoint(userId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
     getAdmins(onResponse) {
         return this._requester.call({
             endpoint: new GetAdminsEndpoint(),
@@ -137,6 +146,14 @@ class ApiClient {
         return this._requester.call({
             endpoint: new BlockPublicationEndpoint(publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    loginAdmin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new LoginAdminEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
         });
     }
 
