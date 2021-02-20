@@ -1,5 +1,4 @@
 import {Requester} from "./Requester.js";
-import {ErrorResponse} from "../responses/generalResponses/ErrorResponse";
 
 class RemoteRequester extends Requester {
     call({endpoint, onResponse, data = undefined}) {

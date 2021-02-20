@@ -8,6 +8,7 @@ import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
+import {LoginAdminEndpoint} from "../endpoints/LoginAdmin";
 
 
 class ApiClient {
@@ -89,6 +90,14 @@ class ApiClient {
         return this._requester.call({
             endpoint: new BlockPublicationEndpoint(publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    loginAdmin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new LoginAdminEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
         });
     }
 }
