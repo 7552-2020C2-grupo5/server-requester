@@ -9,7 +9,7 @@ import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
-import {LoginAdminEndpoint} from "../endpoints/LoginAdmin";
+import {LoginAdminEndpoint} from "../endpoints/LoginAdminEndpoint";
 import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
 import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint";
 import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
