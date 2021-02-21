@@ -2,6 +2,7 @@ import {Endpoint} from "./Endpoint.js";
 import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PostUserSuccessful} from "../responses/users/PostUserSuccessful";
 import {PostUserAlreadyRegistered} from "../responses/users/PostUserAlreadyRegistered";
+import {InvalidEmail} from "../responses/users/InvalidEmail";
 
 export class NewAdminEndpoint extends Endpoint {
     url() {
@@ -9,7 +10,7 @@ export class NewAdminEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [PostUserSuccessful, PostUserAlreadyRegistered];
+        return [PostUserSuccessful, PostUserAlreadyRegistered, InvalidEmail];
     }
 
     method() {
