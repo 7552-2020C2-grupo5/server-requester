@@ -27,11 +27,11 @@ import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
 import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
 import {RecoverPasswordEndpoint} from "../endpoints/RecoverPasswordEndpoint";
 import {GetWalletBalanceEndpoint} from "../endpoints/GetWalletBalanceEndpoint";
+import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = () => {
-    }) {
+    constructor(requester, onServerErrorDo = undefined) {
         this._requester = requester;
         this._handleServerError = onServerErrorDo;
         this._handleResponse = this._handleResponse.bind(this);
@@ -40,7 +40,9 @@ class ApiClient {
     _handleResponse(response, onResponse) {
         if (response instanceof ServerErrorResponse) {
             console.log("Server error: ", response);
-            return this._handleServerError(response);
+            if (this._handleServerError !== undefined) {
+                return this._handleServerError(response);
+            }
         }
 
         return onResponse(response);
@@ -157,6 +159,15 @@ class ApiClient {
             data: data
         });
     }
+
+    newAdmin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new NewAdminEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
 
     bookings(filters = {}, onResponse) {
         return this._requester.call({
