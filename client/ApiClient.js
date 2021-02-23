@@ -101,10 +101,11 @@ class ApiClient {
         });
     }
 
-    getAdmins(onResponse) {
+    getAdmins(onResponse, filters={}) {
         return this._requester.call({
             endpoint: new GetAdminsEndpoint(),
-            onResponse: (response) => this._handleResponse(response, onResponse)
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
         });
     }
 
