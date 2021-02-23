@@ -71,10 +71,11 @@ class ApiClient {
         });
     }
 
-    getUsers(onResponse) {
+    getUsers(onResponse, filters={}) {
         return this._requester.call({
             endpoint: new GetUsersEndpoint(),
-            onResponse: (response) => this._handleResponse(response, onResponse)
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
        });
     }
 
