@@ -1,4 +1,5 @@
 import {Requester} from "./Requester.js";
+import {UnknownErrorResponse} from "../responses/generalResponses/UnknownErrorResponse";
 
 class RemoteRequester extends Requester {
     call({endpoint, onResponse, data = undefined}) {
@@ -29,8 +30,8 @@ class RemoteRequester extends Requester {
          *
          ***/
         .catch(exception => {
-            //TODO. podríamos levantar hacer una response genérica que handlee los 500
             console.log("Exception in API request: ", exception);
+            return onResponse(new UnknownErrorResponse());
         })
     }
 
@@ -79,6 +80,8 @@ class RemoteRequester extends Requester {
         if (endpoint.needsAuthorization()) {
             headers['Authorization'] = endpoint.token();
         }
+
+        headers['Accept'] = 'application/json';
 
         return headers;
     }
