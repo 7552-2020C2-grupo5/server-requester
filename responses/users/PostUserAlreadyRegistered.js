@@ -3,12 +3,12 @@ import {ErrorResponse} from "../generalResponses/ErrorResponse";
 export class PostUserAlreadyRegistered extends ErrorResponse {
     static defaultResponse() {
         return {
-            "message": "User not found"
+            "message": "Admin user already registered"
         }
     }
 
     static understandThis(jsonResponse, httpStatusCode) {
-        return httpStatusCode >= 409;
+        return httpStatusCode === 409;
     }
 
     description() {

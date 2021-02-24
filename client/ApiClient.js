@@ -9,7 +9,7 @@ import {BlockPublicationEndpoint} from "../endpoints/BlockPublicationEndpoint";
 import {GetAdminsEndpoint} from "../endpoints/GetAdminsEndpoint";
 import {GetAdminEndpoint} from "../endpoints/GetAdminEndpoint";
 import {BlockUserEndpoint} from "../endpoints/BlockUserEndpoint";
-import {LoginAdminEndpoint} from "../endpoints/LoginAdmin";
+import {LoginAdminEndpoint} from "../endpoints/LoginAdminEndpoint";
 import {UpdateUserEndpoint} from "../endpoints/UpdateUserEndpoint";
 import {UpdatePublicationEndpoint} from "../endpoints/UpdatePublicationEndpoint";
 import {PostPublicationEndpoint} from "../endpoints/PostPublicationEndpoint";
@@ -31,11 +31,11 @@ import {RejectBookingEndpoint} from "../endpoints/RejectBookingEndpoint";
 import {AcceptBookingEndpoint} from "../endpoints/AcceptBookingEndpoint";
 import {IntentBookingEndpoint} from "../endpoints/IntentBookingEndpoint";
 import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
+import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = () => {
-    }) {
+    constructor(requester, onServerErrorDo = undefined) {
         this._requester = requester;
         this._handleServerError = onServerErrorDo;
         this._handleResponse = this._handleResponse.bind(this);
@@ -44,7 +44,9 @@ class ApiClient {
     _handleResponse(response, onResponse) {
         if (response instanceof ServerErrorResponse) {
             console.log("Server error: ", response);
-            return this._handleServerError(response);
+            if (this._handleServerError !== undefined) {
+                return this._handleServerError(response);
+            }
         }
 
         return onResponse(response);
@@ -73,10 +75,11 @@ class ApiClient {
         });
     }
 
-    getUsers(onResponse) {
+    getUsers(onResponse, filters={}) {
         return this._requester.call({
             endpoint: new GetUsersEndpoint(),
-            onResponse: (response) => this._handleResponse(response, onResponse)
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
        });
     }
 
@@ -102,10 +105,11 @@ class ApiClient {
         });
     }
 
-    getAdmins(onResponse) {
+    getAdmins(onResponse, filters={}) {
         return this._requester.call({
             endpoint: new GetAdminsEndpoint(),
-            onResponse: (response) => this._handleResponse(response, onResponse)
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filters
         });
     }
 
@@ -161,6 +165,15 @@ class ApiClient {
             data: data
         });
     }
+
+    newAdmin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new NewAdminEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
 
     bookings(filters = {}, onResponse) {
         return this._requester.call({

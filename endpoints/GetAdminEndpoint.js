@@ -11,7 +11,7 @@ export class GetAdminEndpoint extends Endpoint {
     }
 
     url() {
-        return USERS_BASE_ENDPOINT + '/admins/' + this._userId;
+        return USERS_BASE_ENDPOINT + '/admins/' + this._adminId;
     }
 
     ownResponses() {
