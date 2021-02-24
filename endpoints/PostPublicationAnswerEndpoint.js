@@ -1,5 +1,5 @@
 import {Endpoint} from "./Endpoint.js";
-import {PUBLICATIONS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PostPublicationAnswerSuccessful} from "../responses/publications/questions/PostPublicationAnswerSuccessful";
 
 export class PostPublicationAnswerEndpoint extends Endpoint {
@@ -11,7 +11,7 @@ export class PostPublicationAnswerEndpoint extends Endpoint {
 
     url() {
         return (
-            PUBLICATIONS_BASE_ENDPOINT + '/publications/' + this._publicationId + '/questions/' + this._questionId
+            MIDDLEWARE_BASE_ENDPOINT + '/publications/' + this._publicationId + '/questions/' + this._questionId
         );
     }
 

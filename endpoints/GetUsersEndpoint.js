@@ -1,10 +1,10 @@
 import {Endpoint} from "./Endpoint.js";
 import {GetUsersSuccessful} from "../responses/users/GetUsersSuccessful";
-import {USERS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 
 export class GetUsersEndpoint extends Endpoint {
     url() {
-        return USERS_BASE_ENDPOINT + '/users';
+        return MIDDLEWARE_BASE_ENDPOINT + '/users/';
     }
 
     ownResponses() {

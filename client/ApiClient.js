@@ -27,6 +27,10 @@ import {AddUserReviewEndpoint} from "../endpoints/AddUserReviewEndpoint";
 import {AddPublicationReviewEndpoint} from "../endpoints/AddPublicationReviewEndpoint";
 import {RecoverPasswordEndpoint} from "../endpoints/RecoverPasswordEndpoint";
 import {GetWalletBalanceEndpoint} from "../endpoints/GetWalletBalanceEndpoint";
+import {RejectBookingEndpoint} from "../endpoints/RejectBookingEndpoint";
+import {AcceptBookingEndpoint} from "../endpoints/AcceptBookingEndpoint";
+import {IntentBookingEndpoint} from "../endpoints/IntentBookingEndpoint";
+import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 
 
 class ApiClient {
@@ -258,6 +262,38 @@ class ApiClient {
         return this._requester.call({
             endpoint: new GetWalletBalanceEndpoint(null, walletAddress),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    intentBooking(data, onResponse) {
+        return this._requester.call({
+            endpoint: new IntentBookingEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    rejectBooking(data, onResponse) {
+        return this._requester.call({
+            endpoint: new RejectBookingEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    acceptBooking(data, onResponse) {
+        return this._requester.call({
+            endpoint: new AcceptBookingEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    ackNewMessage(data, onResponse) {
+        return this._requester.call({
+            endpoint: new NotificationsEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
         });
     }
 }

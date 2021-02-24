@@ -2,11 +2,11 @@ import {Endpoint} from "./Endpoint.js";
 import {LoginSuccessful} from "../responses/login/LoginSuccessful";
 import {InvalidCredentials} from "../responses/login/InvalidCredentials";
 import {UserNotFound} from "../responses/users/UserNotFound";
-import {USERS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 
 export class UserLoginEndpoint extends Endpoint {
     url() {
-        return USERS_BASE_ENDPOINT + '/users/login';
+        return MIDDLEWARE_BASE_ENDPOINT + '/users/login';
     }
 
     ownResponses() {

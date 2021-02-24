@@ -9,25 +9,29 @@ class RemoteRequester extends Requester {
         }
 
         console.log('Request: %s with %s', url, request)
-        return fetch(url, request).then(response => response.json().then(
-            jsonResponse => {
-                console.log('Response: %s with body %s', response.status, jsonResponse)
+        return fetch(url, request).then(response => {
+            let clone = response.clone()
+            clone.text().then(text =>
+                console.log('Response: %s with body %s', response.status, text)
+            )
+            return response.json().then(jsonResponse => {
                 return this._buildResponse(jsonResponse, endpoint, response)
-            })).then(response => {
-                return onResponse(response);
             })
-            /***
-             * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful
-             *
-             * A fetch() promise will reject with a TypeError when a network error is encountered or CORS is
-             * misconfigured on the server-side, although this usually means permission issues or similar —
-             * a 404 does not constitute a network error, for example.
-             *
-             ***/
-            .catch(exception => {
-                //TODO. podríamos levantar hacer una response genérica que handlee los 500
-                console.log("Exception in API request: ", exception);
-            })
+        }).then(response => {
+            return onResponse(response);
+        })
+        /***
+         * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful
+         *
+         * A fetch() promise will reject with a TypeError when a network error is encountered or CORS is
+         * misconfigured on the server-side, although this usually means permission issues or similar —
+         * a 404 does not constitute a network error, for example.
+         *
+         ***/
+        .catch(exception => {
+            //TODO. podríamos levantar hacer una response genérica que handlee los 500
+            console.log("Exception in API request: ", exception);
+        })
     }
 
     _hasQueryStringArguments(data) {
