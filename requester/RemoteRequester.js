@@ -69,7 +69,7 @@ class RemoteRequester extends Requester {
         }
 
         return endpointResponse;
-    }
+   }
 
     _buildHeadersFor(endpoint) {
         let headers = {};

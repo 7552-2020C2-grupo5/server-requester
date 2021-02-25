@@ -4,8 +4,8 @@ import {PublicationIsBlocked} from "../responses/publications/PublicationIsBlock
 import {PublicationBlockedSuccessful} from "../responses/publications/PublicationBlockedSuccessful";
 
 export class BlockPublicationEndpoint extends Endpoint {
-    constructor(userId) {
-        super();
+    constructor(token, userId) {
+        super(token);
         this._userId = userId;
     }
 

@@ -4,8 +4,8 @@ import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 
 
 export class UpdateUserEndpoint extends Endpoint {
-    constructor(userId, userData) {
-        super();
+    constructor(token, userId, userData) {
+        super(token);
         this._userId = userId;
         this._userData = userData;
     }

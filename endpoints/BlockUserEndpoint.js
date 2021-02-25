@@ -4,8 +4,8 @@ import {UserIsBlocked} from "../responses/users/UserIsBlocked";
 import {UserBlockedSuccessful} from "../responses/users/UserBlockedSuccessful";
 
 export class BlockUserEndpoint extends Endpoint {
-    constructor(userId) {
-        super();
+    constructor(token, userId) {
+        super(token);
         this._userId = userId;
     }
 

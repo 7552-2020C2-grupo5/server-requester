@@ -5,8 +5,8 @@ import {PublicationNotFound} from "../responses/publications/PublicationNotFound
 import {GetPublicationSuccessful} from "../responses/publications/GetPublicationSuccessful";
 
 export class GetPublicationEndpoint extends Endpoint {
-    constructor(publicationId) {
-        super();
+    constructor(token, publicationId) {
+        super(token);
         this._publicationId = publicationId;
     }
 

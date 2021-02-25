@@ -5,8 +5,8 @@ import {UserIsBlocked} from "../responses/users/UserIsBlocked";
 import {UserNotFound} from "../responses/users/UserNotFound";
 
 export class GetAdminEndpoint extends Endpoint {
-    constructor(_adminId) {
-        super();
+    constructor(token, _adminId) {
+        super(token);
         this._adminId = _adminId;
     }
 

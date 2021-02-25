@@ -35,8 +35,9 @@ import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = undefined) {
+    constructor(requester, onServerErrorDo = undefined, token = undefined) {
         this._requester = requester;
+        this._token = token;
         this._handleServerError = onServerErrorDo;
         this._handleResponse = this._handleResponse.bind(this);
     }
@@ -50,11 +51,11 @@ class ApiClient {
         }
 
         return onResponse(response);
-    }
+   }
 
     register(userDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostUserEndpoint(),
+            endpoint: new PostUserEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: userDetails
         });
@@ -70,14 +71,14 @@ class ApiClient {
 
     userLogout(token, onResponse) {
         return this._requester.call({
-            endpoint: new UserLogoutEndpoint(token),
+            endpoint: new UserLogoutEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
 
     getUsers(onResponse, filters={}) {
         return this._requester.call({
-            endpoint: new GetUsersEndpoint(),
+            endpoint: new GetUsersEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
        });
@@ -85,14 +86,14 @@ class ApiClient {
 
     profileData(userId, onResponse) {
         return this._requester.call({
-            endpoint: new GetUserEndpoint(userId),
+            endpoint: new GetUserEndpoint(this._token, userId),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
 
     updateProfileData(userId, userData, onResponse) {
         return this._requester.call({
-            endpoint: new UpdateUserEndpoint(userId, userData),
+            endpoint: new UpdateUserEndpoint(this._token, userId, userData),
             data: userData,
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
@@ -100,14 +101,14 @@ class ApiClient {
 
     blockUser(userId, onResponse)  {
         return this._requester.call({
-            endpoint: new BlockUserEndpoint(userId),
+            endpoint: new BlockUserEndpoint(this._token, userId),
             onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 
     getAdmins(onResponse, filters={}) {
         return this._requester.call({
-            endpoint: new GetAdminsEndpoint(),
+            endpoint: new GetAdminsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
         });
@@ -115,14 +116,14 @@ class ApiClient {
 
     getAdminProfile(adminId, onResponse) {
         return this._requester.call({
-            endpoint: new GetAdminEndpoint(adminId),
+            endpoint: new GetAdminEndpoint(this._token, adminId),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
 
     publications(onResponse, filters={})  {
         return this._requester.call({
-            endpoint: new GetPublicationsEndpoint(),
+            endpoint: new GetPublicationsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
         });
@@ -130,14 +131,14 @@ class ApiClient {
 
     getPublication(publicationId, onResponse)  {
         return this._requester.call({
-            endpoint: new GetPublicationEndpoint(publicationId),
+            endpoint: new GetPublicationEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 
     updatePublication(publicationId, publicationDetails, onResponse) {
         return this._requester.call({
-            endpoint: new UpdatePublicationEndpoint(null, publicationId),
+            endpoint: new UpdatePublicationEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: publicationDetails
         });
@@ -145,7 +146,7 @@ class ApiClient {
 
     postPublication(publicationDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostPublicationEndpoint(),
+            endpoint: new PostPublicationEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: publicationDetails
         });
@@ -153,14 +154,14 @@ class ApiClient {
 
     blockPublication(publicationId, onResponse)  {
         return this._requester.call({
-            endpoint: new BlockPublicationEndpoint(publicationId),
+            endpoint: new BlockPublicationEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 
     loginAdmin(data, onResponse) {
         return this._requester.call({
-            endpoint: new LoginAdminEndpoint(),
+            endpoint: new LoginAdminEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
@@ -168,7 +169,7 @@ class ApiClient {
 
     newAdmin(data, onResponse) {
         return this._requester.call({
-            endpoint: new NewAdminEndpoint(),
+            endpoint: new NewAdminEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
@@ -177,7 +178,7 @@ class ApiClient {
 
     bookings(filters = {}, onResponse) {
         return this._requester.call({
-            endpoint: new GetBookingsEndpoint(),
+            endpoint: new GetBookingsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
         });
@@ -185,7 +186,7 @@ class ApiClient {
 
     makeReservation(reservationDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostBookingEndpoint(),
+            endpoint: new PostBookingEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: reservationDetails
         });
@@ -193,7 +194,7 @@ class ApiClient {
 
     addQuestion(publicationId, questionDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostPublicationQuestionEndpoint(null, publicationId),
+            endpoint: new PostPublicationQuestionEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: questionDetails
         });
@@ -201,7 +202,7 @@ class ApiClient {
 
     addAnswer(publicationId, questionId, answerDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostPublicationAnswerEndpoint(null, publicationId, questionId),
+            endpoint: new PostPublicationAnswerEndpoint(this._token, publicationId, questionId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: answerDetails
         });
@@ -209,7 +210,7 @@ class ApiClient {
 
     starPublication(publicationId, userId, onResponse) {
         return this._requester.call({
-            endpoint: new StarPublicationEndpoint(null, publicationId),
+            endpoint: new StarPublicationEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {user_id: userId}
         });
@@ -217,7 +218,7 @@ class ApiClient {
 
     unstarPublication(publicationId, userId, onResponse) {
        return this._requester.call({
-            endpoint: new UnstarPublicationEndpoint(null, publicationId),
+            endpoint: new UnstarPublicationEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {user_id: userId}
         });
@@ -225,7 +226,7 @@ class ApiClient {
 
     getPublicationStars(publicationId, userId, onResponse) {
         return this._requester.call({
-            endpoint: new GetPublicationStarsEndpoint(null, publicationId),
+            endpoint: new GetPublicationStarsEndpoint(this._token, publicationId),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {user_id: userId}
         });
@@ -233,7 +234,7 @@ class ApiClient {
 
     publicationReviews(filters={}, onResponse) {
         return this._requester.call({
-            endpoint: new GetPublicationReviewsEndpoint(),
+            endpoint: new GetPublicationReviewsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
         });
@@ -241,7 +242,7 @@ class ApiClient {
 
     userReviews(filters={}, onResponse) {
         return this._requester.call({
-            endpoint: new GetUserReviewsEndpoint(),
+            endpoint: new GetUserReviewsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
         });
@@ -249,7 +250,7 @@ class ApiClient {
 
     addPublicationReview(reviewDetails, onResponse) {
         return this._requester.call({
-            endpoint: new AddPublicationReviewEndpoint(),
+            endpoint: new AddPublicationReviewEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: reviewDetails
         });
@@ -257,7 +258,7 @@ class ApiClient {
 
     addUserReview(reviewDetails, onResponse) {
         return this._requester.call({
-            endpoint: new AddUserReviewEndpoint(),
+            endpoint: new AddUserReviewEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: reviewDetails
         });
@@ -265,7 +266,7 @@ class ApiClient {
 
     resetPassword(recoverEmail, onResponse) {
         return this._requester.call({
-            endpoint: new RecoverPasswordEndpoint(),
+            endpoint: new RecoverPasswordEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {email: recoverEmail}
         });
@@ -273,14 +274,14 @@ class ApiClient {
 
     walletBalance(walletAddress, onResponse) {
         return this._requester.call({
-            endpoint: new GetWalletBalanceEndpoint(null, walletAddress),
+            endpoint: new GetWalletBalanceEndpoint(this._token, walletAddress),
             onResponse: (response) => this._handleResponse(response, onResponse),
         });
     }
 
     intentBooking(data, onResponse) {
         return this._requester.call({
-            endpoint: new IntentBookingEndpoint(),
+            endpoint: new IntentBookingEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
@@ -288,7 +289,7 @@ class ApiClient {
 
     rejectBooking(data, onResponse) {
         return this._requester.call({
-            endpoint: new RejectBookingEndpoint(),
+            endpoint: new RejectBookingEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
@@ -296,7 +297,7 @@ class ApiClient {
 
     acceptBooking(data, onResponse) {
         return this._requester.call({
-            endpoint: new AcceptBookingEndpoint(),
+            endpoint: new AcceptBookingEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
@@ -304,7 +305,7 @@ class ApiClient {
 
     ackNewMessage(data, onResponse) {
         return this._requester.call({
-            endpoint: new NotificationsEndpoint(),
+            endpoint: new NotificationsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
