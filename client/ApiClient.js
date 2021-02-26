@@ -46,6 +46,10 @@ class ApiClient {
         this._token = token;
     }
 
+    hasToken() {
+        return this._token !== undefined;
+    }
+
     _handleResponse(response, onResponse) {
         if (response instanceof ServerErrorResponse) {
             console.log("Server error: ", response);
@@ -126,6 +130,7 @@ class ApiClient {
     }
 
     publications(onResponse, filters={})  {
+        debugger;
         return this._requester.call({
             endpoint: new GetPublicationsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),

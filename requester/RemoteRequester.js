@@ -9,7 +9,7 @@ class RemoteRequester extends Requester {
             url += "?" + this._dataToQueryString(data);
         }
 
-        console.log('Request: %s with %s', url, request)
+        console.log('Request: %s with %s', url, request);
         return fetch(url, request).then(response => {
             let clone = response.clone()
             clone.text().then(text =>
