@@ -20,7 +20,7 @@ class RemoteRequester extends Requester {
             })
         }).then(response => {
             return onResponse(response);
-        })
+       })
         /***
          * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful
          *

@@ -32,13 +32,15 @@ import {AcceptBookingEndpoint} from "../endpoints/AcceptBookingEndpoint";
 import {IntentBookingEndpoint} from "../endpoints/IntentBookingEndpoint";
 import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
+import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = undefined, token = undefined) {
+    constructor(requester, onServerErrorDo = undefined, token = undefined, onTokenExpired = undefined) {
         this._requester = requester;
         this._token = token;
         this._handleServerError = onServerErrorDo;
+        this._onTokenExpired = onTokenExpired;
         this._handleResponse = this._handleResponse.bind(this);
     }
 
@@ -57,7 +59,10 @@ class ApiClient {
                 return this._handleServerError(response);
             }
         }
-
+        if (response instanceof TokenExpiredResponse) {
+            console.log("Token expired: ", response);
+            return this._onTokenExpired(response);
+        }
         return onResponse(response);
    }
 

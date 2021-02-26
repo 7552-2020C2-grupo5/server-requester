@@ -1,4 +1,5 @@
 import {SuccessfulApiResponse} from "../responses/generalResponses/SuccessfulApiResponse.js";
+import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 import {ServerErrorResponse} from "../responses/generalResponses/ServerErrorResponse";
 
 export class Endpoint {
@@ -8,14 +9,14 @@ export class Endpoint {
 
     url() {
         throw new Error("You have to implement the method");
-    }
+   }
 
     token() {
         return this._token;
     }
 
     generalResponses() {
-        return [ServerErrorResponse, SuccessfulApiResponse];
+        return [ServerErrorResponse, SuccessfulApiResponse, TokenExpiredResponse];
     }
 
     ownResponses() {
