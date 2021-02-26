@@ -42,6 +42,10 @@ class ApiClient {
         this._handleResponse = this._handleResponse.bind(this);
     }
 
+    setToken(token) {
+        this._token = token;
+    }
+
     _handleResponse(response, onResponse) {
         if (response instanceof ServerErrorResponse) {
             console.log("Server error: ", response);
