@@ -130,7 +130,6 @@ class ApiClient {
     }
 
     publications(onResponse, filters={})  {
-        debugger;
         return this._requester.call({
             endpoint: new GetPublicationsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),

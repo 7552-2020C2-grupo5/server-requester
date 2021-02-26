@@ -4,7 +4,7 @@ import {RejectBookingSuccessful} from "../responses/bookings/RejectBookingSucces
 
 export class RejectBookingEndpoint extends Endpoint {
     url() {
-        return MIDDLEWARE_BASE_ENDPOINT + 'bookings/reject_booking';
+        return MIDDLEWARE_BASE_ENDPOINT + '/bookings/reject_booking';
     }
 
     ownResponses() {
