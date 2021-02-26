@@ -33,6 +33,7 @@ import {IntentBookingEndpoint} from "../endpoints/IntentBookingEndpoint";
 import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
+import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
 
 
 class ApiClient {
@@ -77,6 +78,14 @@ class ApiClient {
     userLogin(data, onResponse) {
         return this._requester.call({
             endpoint: new UserLoginEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    oauthLogin(data, onResponse) {
+        return this._requester.call({
+            endpoint: new OAuthLoginEndpoint(),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
