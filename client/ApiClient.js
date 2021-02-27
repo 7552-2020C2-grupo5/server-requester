@@ -34,6 +34,9 @@ import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
+import {getISODateStringFrom} from "../../utils";
+import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
+import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 
 
 class ApiClient {
@@ -331,6 +334,21 @@ class ApiClient {
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
+    }
+
+    getMetrics(initialDate, lastDate, onResponse) {
+        const data = {
+            start_date: getISODateStringFrom(initialDate),
+            end_date: getISODateStringFrom(lastDate),
+        }
+        return setTimeout(() => onResponse(new GetMetricsSuccessful(GetMetricsSuccessful.defaultResponse())),
+            2500);
+        //TODO: Llamar al endpoint
+        // return this._requester.call({
+        //     endpoint: new GetMetricsEndpoint(this._token),
+        //     onResponse: (response) => this._handleResponse(response, onResponse),
+        //     data: data
+        // });
     }
 }
 
