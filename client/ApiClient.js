@@ -37,10 +37,12 @@ import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
 import {getISODateStringFrom} from "../../utils";
 import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
 import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
+import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = undefined, token = undefined, onTokenExpired = undefined) {
+    constructor(requester, onServerErrorDo = undefined, token = undefined,
+                onTokenExpired = undefined) {
         this._requester = requester;
         this._token = token;
         this._handleServerError = onServerErrorDo;
@@ -65,7 +67,9 @@ class ApiClient {
         }
         if (response instanceof TokenExpiredResponse) {
             console.log("Token expired: ", response);
-            return this._onTokenExpired(response);
+            if (this._onTokenExpired !== undefined) {
+                return this._onTokenExpired(response);
+            }
         }
         return onResponse(response);
    }
@@ -97,6 +101,14 @@ class ApiClient {
     userLogout(token, onResponse) {
         return this._requester.call({
             endpoint: new UserLogoutEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    adminLogout(onResponse) {
+        debugger;
+        return this._requester.call({
+            endpoint: new AdminLogoutEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
