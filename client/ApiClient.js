@@ -38,6 +38,8 @@ import {getISODateStringFrom} from "../../utils";
 import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
 import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
+import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
+import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWalletSuccessful";
 
 
 class ApiClient {
@@ -106,7 +108,6 @@ class ApiClient {
     }
 
     adminLogout(onResponse) {
-        debugger;
         return this._requester.call({
             endpoint: new AdminLogoutEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse)
@@ -358,6 +359,20 @@ class ApiClient {
         //TODO: Llamar al endpoint
         // return this._requester.call({
         //     endpoint: new GetMetricsEndpoint(this._token),
+        //     onResponse: (response) => this._handleResponse(response, onResponse),
+        //     data: data
+        // });
+    }
+
+    rechargeWallet(userAddress, accountMnemonic, amount, onResponse) {
+        const data = {
+            mnemonic: accountMnemonic,
+            value: amount
+        }
+        return setTimeout(() => onResponse(new RechargeWalletSuccessful(RechargeWalletSuccessful.defaultResponse())),
+            2500);
+        // return this._requester.call({
+        //     endpoint: new RechargeWalletEndpoint(this._token, userAddress),
         //     onResponse: (response) => this._handleResponse(response, onResponse),
         //     data: data
         // });
