@@ -40,6 +40,9 @@ import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
 import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWalletSuccessful";
+import {GetServersEndpoint} from "../endpoints/GetServersEndpoint";
+import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
+import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
 
 
 class ApiClient {
@@ -369,6 +372,7 @@ class ApiClient {
             mnemonic: accountMnemonic,
             value: amount
         }
+        //TODO
         return setTimeout(() => onResponse(new RechargeWalletSuccessful(RechargeWalletSuccessful.defaultResponse())),
             2500);
         // return this._requester.call({
@@ -377,6 +381,28 @@ class ApiClient {
         //     data: data
         // });
     }
+
+    getServers(onResponse) {
+        return this._requester.call({
+            endpoint: new GetServersEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    getOptionsForServer(onResponse) {
+        return this._requester.call({
+            endpoint: new GetServerOptionsEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    blockServer(serverId, onResponse)  {
+        return this._requester.call({
+            endpoint: new BlockServerEndpoint(this._token, serverId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
 }
 
 export default ApiClient;
