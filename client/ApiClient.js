@@ -34,10 +34,17 @@ import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
+import {getISODateStringFrom} from "../../utils";
+import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
+import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
+import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
+import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
+import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWalletSuccessful";
 
 
 class ApiClient {
-    constructor(requester, onServerErrorDo = undefined, token = undefined, onTokenExpired = undefined) {
+    constructor(requester, onServerErrorDo = undefined, token = undefined,
+                onTokenExpired = undefined) {
         this._requester = requester;
         this._token = token;
         this._handleServerError = onServerErrorDo;
@@ -62,7 +69,9 @@ class ApiClient {
         }
         if (response instanceof TokenExpiredResponse) {
             console.log("Token expired: ", response);
-            return this._onTokenExpired(response);
+            if (this._onTokenExpired !== undefined) {
+                return this._onTokenExpired(response);
+            }
         }
         return onResponse(response);
    }
@@ -94,6 +103,13 @@ class ApiClient {
     userLogout(token, onResponse) {
         return this._requester.call({
             endpoint: new UserLogoutEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse)
+        });
+    }
+
+    adminLogout(onResponse) {
+        return this._requester.call({
+            endpoint: new AdminLogoutEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse)
         });
     }
@@ -331,6 +347,35 @@ class ApiClient {
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: data
         });
+    }
+
+    getMetrics(initialDate, lastDate, onResponse) {
+        const data = {
+            start_date: getISODateStringFrom(initialDate),
+            end_date: getISODateStringFrom(lastDate),
+        }
+        return setTimeout(() => onResponse(new GetMetricsSuccessful(GetMetricsSuccessful.defaultResponse())),
+            2500);
+        //TODO: Llamar al endpoint
+        // return this._requester.call({
+        //     endpoint: new GetMetricsEndpoint(this._token),
+        //     onResponse: (response) => this._handleResponse(response, onResponse),
+        //     data: data
+        // });
+    }
+
+    rechargeWallet(userAddress, accountMnemonic, amount, onResponse) {
+        const data = {
+            mnemonic: accountMnemonic,
+            value: amount
+        }
+        return setTimeout(() => onResponse(new RechargeWalletSuccessful(RechargeWalletSuccessful.defaultResponse())),
+            2500);
+        // return this._requester.call({
+        //     endpoint: new RechargeWalletEndpoint(this._token, userAddress),
+        //     onResponse: (response) => this._handleResponse(response, onResponse),
+        //     data: data
+        // });
     }
 }
 
