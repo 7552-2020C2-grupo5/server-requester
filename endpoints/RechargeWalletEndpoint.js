@@ -10,7 +10,7 @@ export class RechargeWalletEndpoint extends Endpoint {
     }
 
     url() {
-        return MIDDLEWARE_BASE_ENDPOINT + '/transactions/' + `${this._walletAddress}`
+        return MIDDLEWARE_BASE_ENDPOINT + '/transactions/' + this._walletAddress
     }
 
     ownResponses() {

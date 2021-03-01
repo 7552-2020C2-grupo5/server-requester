@@ -1,4 +1,3 @@
-import {ApiResponse} from "./Response";
 import {ErrorResponse} from "./ErrorResponse";
 
 export class UnknownErrorResponse extends ErrorResponse {

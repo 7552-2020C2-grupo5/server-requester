@@ -2,7 +2,7 @@ import {Requester} from "./Requester.js";
 import {UnknownErrorResponse} from "../responses/generalResponses/UnknownErrorResponse";
 
 class RemoteRequester extends Requester {
-    call({endpoint, onResponse, data = undefined}) {
+    call({endpoint, onResponse, data = undefined, trial=1}) {
         const request = this._buildRequest(endpoint, data);
         let url = endpoint.url();
         if (endpoint.method() === 'GET' && this._hasQueryStringArguments(data)) {
@@ -30,6 +30,14 @@ class RemoteRequester extends Requester {
          *
          ***/
         .catch(exception => {
+            if (trial < 2) {
+                // If fetch fails, we do a retry
+                return this.call({
+                    endpoint: endpoint,
+                    onResponse: onResponse,
+                    data: data,
+                    trial: trial + 1});
+            }
             console.log("Exception in API request: ", exception);
             return onResponse(new UnknownErrorResponse());
         })
