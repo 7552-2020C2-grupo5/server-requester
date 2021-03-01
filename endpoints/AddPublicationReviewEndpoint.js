@@ -1,6 +1,7 @@
 import {Endpoint} from "./Endpoint.js";
 import {REVIEWS_BASE_ENDPOINT} from "../requester";
 import {AddPublicationReviewSuccessful} from "../responses/reviews/AddPublicationReviewSuccessful";
+import {AlreadyReviewedPublication} from "../responses/reviews/AlreadyReviewedPublication";
 
 export class AddPublicationReviewEndpoint extends Endpoint {
     url() {
@@ -8,7 +9,7 @@ export class AddPublicationReviewEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [AddPublicationReviewSuccessful];
+        return [AddPublicationReviewSuccessful, AlreadyReviewedPublication];
     }
 
     method() {
