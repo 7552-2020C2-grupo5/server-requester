@@ -19,8 +19,8 @@ export class GetServerOptionsSuccessful extends SuccessfulApiResponse {
         return this.content().services.map(
             (service) => {
                 return {
-                    text: service,
-                    value: service.toUpperCase()
+                    text: service.toUpperCase(),
+                    value: service
                 }
             }
         );

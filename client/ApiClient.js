@@ -43,6 +43,7 @@ import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWallet
 import {GetServersEndpoint} from "../endpoints/GetServersEndpoint";
 import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
 import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
+import {NewServerEndpoint} from "../endpoints/NewServerEndpoint";
 
 
 class ApiClient {
@@ -372,14 +373,11 @@ class ApiClient {
             mnemonic: accountMnemonic,
             value: amount
         }
-        //TODO
-        return setTimeout(() => onResponse(new RechargeWalletSuccessful(RechargeWalletSuccessful.defaultResponse())),
-            2500);
-        // return this._requester.call({
-        //     endpoint: new RechargeWalletEndpoint(this._token, userAddress),
-        //     onResponse: (response) => this._handleResponse(response, onResponse),
-        //     data: data
-        // });
+        return this._requester.call({
+            endpoint: new RechargeWalletEndpoint(this._token, userAddress),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
     }
 
     getServers(onResponse) {
@@ -400,6 +398,16 @@ class ApiClient {
         return this._requester.call({
             endpoint: new BlockServerEndpoint(this._token, serverId),
             onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
+
+    newServer(serverName, onResponse)  {
+        return this._requester.call({
+            endpoint: new NewServerEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {
+                server_name: serverName
+            }
         });
     }
 

@@ -15,15 +15,20 @@ export class GetServersSuccessful extends SuccessfulApiResponse {
 
     servers() {
         return this.content().map(
-            (booking) => {
+            (server) => {
                 return {
-                    id: booking.id,
-                    serverName: booking.server_name,
-                    isBlocked: booking.blocked,
-                    createdAt: booking.created_at,
-                    blockedAt: booking.blocked_at,
+                    id: server.id,
+                    serverName: server.server_name,
+                    isBlocked: server.blocked,
+                    status: this.status(server.blocked),
+                    createdAt: server.created_at,
+                    blockedAt: server.blocked_at,
                 }
             }
         );
+    }
+
+    status(isBlocked) {
+        return isBlocked ? "Bloqueado" : "Activo";
     }
 }
