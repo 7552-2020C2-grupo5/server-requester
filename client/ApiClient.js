@@ -40,6 +40,7 @@ import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
 import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWalletSuccessful";
+import {GetBookingEndpoint} from "../endpoints/GetBookingEndpoint";
 
 
 class ApiClient {
@@ -213,6 +214,12 @@ class ApiClient {
         });
     }
 
+    booking(bookingId, onResponse) {
+        return this._requester.call({
+            endpoint: new GetBookingEndpoint(this._token, bookingId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
 
     bookings(filters = {}, onResponse) {
         return this._requester.call({
