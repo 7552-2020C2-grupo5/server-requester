@@ -1,7 +1,8 @@
 import {Endpoint} from "./Endpoint.js";
-import {PUBLICATIONS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PublicationIsBlocked} from "../responses/publications/PublicationIsBlocked";
 import {PublicationBlockedSuccessful} from "../responses/publications/PublicationBlockedSuccessful";
+import {PublicationNotFound} from "../responses/publications/PublicationNotFound";
 
 export class BlockPublicationEndpoint extends Endpoint {
     constructor(token, userId) {
@@ -10,11 +11,11 @@ export class BlockPublicationEndpoint extends Endpoint {
     }
 
     url() {
-        return PUBLICATIONS_BASE_ENDPOINT + '/publications/' + this._userId;
+        return MIDDLEWARE_BASE_ENDPOINT + '/publications/' + this._userId;
     }
 
     ownResponses() {
-        return [PublicationBlockedSuccessful, PublicationIsBlocked];
+        return [PublicationBlockedSuccessful, PublicationIsBlocked, PublicationNotFound];
     }
 
     method() {

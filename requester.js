@@ -3,6 +3,7 @@ export const PUBLICATIONS_BASE_ENDPOINT = "https://bookbnb5-publications.herokua
 export const RESERVATIONS_BASE_ENDPOINT = "https://bookbnb5-bookings.herokuapp.com/v1"
 export const REVIEWS_BASE_ENDPOINT = "https://bookbnb5-reviews.herokuapp.com/v1"
 export const MIDDLEWARE_BASE_ENDPOINT = "https://bookbnb5-middleware.herokuapp.com/bookbnb"
+export const SERVERS_BASE_ENDPOINT = "https://tokens-microservice.herokuapp.com/v1"
 
 
 class ServerAPI {

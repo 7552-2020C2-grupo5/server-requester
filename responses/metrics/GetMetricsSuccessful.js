@@ -1,5 +1,4 @@
 import {SuccessfulApiResponse} from "../generalResponses/SuccessfulApiResponse.js";
-import {getDateStringFrom} from "../../../utils";
 
 const metricsConversions = {
     new_users_per_day: "newUsersPerDay",
