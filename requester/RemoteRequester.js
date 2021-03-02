@@ -8,7 +8,6 @@ class RemoteRequester extends Requester {
         if (endpoint.method() === 'GET' && this._hasQueryStringArguments(data)) {
             url += "?" + this._dataToQueryString(data);
         }
-
         console.log('Request: %s with %s', url, request);
         return fetch(url, request).then(response => {
             let clone = response.clone()

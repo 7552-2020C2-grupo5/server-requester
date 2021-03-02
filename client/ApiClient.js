@@ -35,16 +35,15 @@ import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
 import {getISODateStringFrom} from "../../utils";
-import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
 import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
-import {RechargeWalletSuccessful} from "../responses/transactions/RechargeWalletSuccessful";
 import {GetBookingEndpoint} from "../endpoints/GetBookingEndpoint";
 import {GetServersEndpoint} from "../endpoints/GetServersEndpoint";
 import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
 import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
 import {NewServerEndpoint} from "../endpoints/NewServerEndpoint";
+import {GetLocationFromCoordinatesEndpoint} from "../endpoints/GetLocationFromCoordinatesEndpoint";
 
 
 class ApiClient {
@@ -414,6 +413,19 @@ class ApiClient {
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {
                 server_name: serverName
+            }
+        });
+    }
+
+    getLocationFromCoordinates(latitude, longitude, onResponse) {
+        return this._requester.call({
+            endpoint: new GetLocationFromCoordinatesEndpoint(),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: {
+                key: process.env.REACT_APP_ACCESS_TOKEN_LOCATION_API,
+                format: "json",
+                lat: latitude,
+                lon: longitude
             }
         });
     }
