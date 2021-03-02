@@ -38,6 +38,7 @@ import {getISODateStringFrom} from "../../utils";
 import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
+import {GetBookingEndpoint} from "../endpoints/GetBookingEndpoint";
 import {GetServersEndpoint} from "../endpoints/GetServersEndpoint";
 import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
 import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
@@ -216,6 +217,12 @@ class ApiClient {
         });
     }
 
+    booking(bookingId, onResponse) {
+        return this._requester.call({
+            endpoint: new GetBookingEndpoint(this._token, bookingId),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+        });
+    }
 
     bookings(filters = {}, onResponse) {
         return this._requester.call({

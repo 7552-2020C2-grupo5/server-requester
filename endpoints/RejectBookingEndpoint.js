@@ -1,6 +1,7 @@
 import {Endpoint} from "./Endpoint.js";
 import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {RejectBookingSuccessful} from "../responses/bookings/RejectBookingSuccessful";
+import {PaymentFailed} from "../responses/bookings/PaymentFailed";
 
 export class RejectBookingEndpoint extends Endpoint {
     url() {
@@ -8,7 +9,7 @@ export class RejectBookingEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [RejectBookingSuccessful];
+        return [RejectBookingSuccessful, PaymentFailed];
     }
 
     method() {
