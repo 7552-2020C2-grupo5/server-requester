@@ -1,6 +1,7 @@
 import {Endpoint} from "./Endpoint.js";
 import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PostNotificationSuccessful} from "../responses/notifications/PostNotificationSuccessful";
+import {PostNotificationError} from "../responses/notifications/PostNotificationError";
 
 export class NotificationsEndpoint extends Endpoint {
     url() {
@@ -8,7 +9,7 @@ export class NotificationsEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [PostNotificationSuccessful];
+        return [PostNotificationSuccessful, PostNotificationError];
     }
 
     method() {
