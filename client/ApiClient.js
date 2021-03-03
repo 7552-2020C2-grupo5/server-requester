@@ -44,6 +44,8 @@ import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
 import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
 import {NewServerEndpoint} from "../endpoints/NewServerEndpoint";
 import {GetLocationFromCoordinatesEndpoint} from "../endpoints/GetLocationFromCoordinatesEndpoint";
+import {GetRecommendationsByPopularEndpoint} from "../endpoints/GetRecommendationsByPopularEndpoint";
+import {GetRecommendationsByReviewsEndpoint} from "../endpoints/GetRecommendationsByReviewsEndpoint";
 
 
 class ApiClient {
@@ -430,6 +432,22 @@ class ApiClient {
         });
     }
 
+    getRecommendationsByPopular(data, onResponse) {
+        console.log(this._token)
+        return this._requester.call({
+            endpoint: new GetRecommendationsByPopularEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
+
+    getRecommendationsByReviews(data, onResponse) {
+        return this._requester.call({
+            endpoint: new GetRecommendationsByReviewsEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
+    }
 }
 
 export default ApiClient;
