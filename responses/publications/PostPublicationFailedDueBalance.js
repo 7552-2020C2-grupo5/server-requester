@@ -1,10 +1,9 @@
-import {SuccessfulApiResponse} from "../generalResponses/SuccessfulApiResponse";
+import {ErrorResponse} from "../generalResponses/ErrorResponse";
 
-export class PostPublicationFailedDueBalance extends SuccessfulApiResponse {
+export class PostPublicationFailedDueBalance extends ErrorResponse {
     static defaultResponse() {
         return {
             "message": "gas required exceeds allowance (0)"
-
         }
     }
 
