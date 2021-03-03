@@ -84,7 +84,7 @@ class ApiClient {
 
     register(userDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostUserEndpoint(this._token),
+            endpoint: new PostUserEndpoint("AUTH_FAKE"),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: userDetails
         });
@@ -316,7 +316,7 @@ class ApiClient {
 
     resetPassword(recoverEmail, onResponse) {
         return this._requester.call({
-            endpoint: new RecoverPasswordEndpoint(this._token),
+            endpoint: new RecoverPasswordEndpoint("AUTH_FAKE"),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {email: recoverEmail}
         });
