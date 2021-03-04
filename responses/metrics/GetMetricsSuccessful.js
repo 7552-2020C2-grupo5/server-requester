@@ -6,7 +6,7 @@ const metricsConversions = {
     new_publications_per_day: "newPublicationsPerDay",
     publications_during_history: "publicationsDuringHistory",
     transactions_accepted_per_day: "transactionsAcceptedPerDay",
-    total_amount_in_transactions_per_day: "totalAmountInTransactionsPerDay"
+    revenue_per_day: "totalAmountInTransactionsPerDay"
 };
 
 export class GetMetricsSuccessful extends SuccessfulApiResponse {
@@ -58,7 +58,7 @@ export class GetMetricsSuccessful extends SuccessfulApiResponse {
                 ]
             },
             {
-                name: "total_amount_in_transactions_per_day",
+                name: "revenue_per_day",
                 data: [
                     {date: "2021-02-02", value: 0.05},
                     {date: "2021-02-03", value: 0.1},

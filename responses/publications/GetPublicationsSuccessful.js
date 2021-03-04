@@ -15,6 +15,7 @@ export class GetPublicationsSuccessful extends SuccessfulApiResponse {
                 "title": "Titulo",
                 "description": "Descripción",
                 "rooms": 30,
+                "blocked": false,
                 "beds": 20,
                 "bathrooms": 10,
                 "price_per_night": 100,
@@ -26,5 +27,20 @@ export class GetPublicationsSuccessful extends SuccessfulApiResponse {
                 ]
             },
         ];
+    }
+
+    publications() {
+        return this.content().map(
+            (publication) => {
+                return {
+                    ...publication,
+                    status: this._translateStatus(publication.blocked)
+                }
+            }
+        )
+    }
+
+    _translateStatus(isBlocked) {
+        return isBlocked ? "Bloqueada" : "Activa";
     }
 }

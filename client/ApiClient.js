@@ -34,8 +34,6 @@ import {NotificationsEndpoint} from "../endpoints/NotificationsEndpoint";
 import {NewAdminEndpoint} from "../endpoints/NewAdminEndpoint";
 import {TokenExpiredResponse} from "../responses/login/TokenExpiredResponse";
 import {OAuthLoginEndpoint} from "../endpoints/OAuthLoginEndpoint";
-import {getISODateStringFrom} from "../../utils";
-import {GetMetricsSuccessful} from "../responses/metrics/GetMetricsSuccessful";
 import {AdminLogoutEndpoint} from "../endpoints/AdminLogoutEndpoint";
 import {RechargeWalletEndpoint} from "../endpoints/RechargeWalletEndpoint";
 import {GetBookingEndpoint} from "../endpoints/GetBookingEndpoint";
@@ -44,6 +42,7 @@ import {GetServerOptionsEndpoint} from "../endpoints/GetServerOptionsEndpoint";
 import {BlockServerEndpoint} from "../endpoints/BlockServerEndpoint";
 import {NewServerEndpoint} from "../endpoints/NewServerEndpoint";
 import {GetLocationFromCoordinatesEndpoint} from "../endpoints/GetLocationFromCoordinatesEndpoint";
+import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
 import {GetRecommendationsByPopularEndpoint} from "../endpoints/GetRecommendationsByPopularEndpoint";
 import {GetRecommendationsByReviewsEndpoint} from "../endpoints/GetRecommendationsByReviewsEndpoint";
 
@@ -84,7 +83,7 @@ class ApiClient {
 
     register(userDetails, onResponse) {
         return this._requester.call({
-            endpoint: new PostUserEndpoint("AUTH_FAKE"),
+            endpoint: new PostUserEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: userDetails
         });
@@ -126,6 +125,15 @@ class ApiClient {
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
        });
+    }
+
+    getAllUsers(onResponse, filters={}) {
+        const filtersToApply = {...filters, filter_blocked: 'false'};
+        return this._requester.call({
+            endpoint: new GetUsersEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filtersToApply
+        });
     }
 
     profileData(userId, onResponse) {
@@ -170,6 +178,15 @@ class ApiClient {
             endpoint: new GetPublicationsEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: filters
+        });
+    }
+
+    getAllPublications(onResponse, filters={})  {
+        const filtersToApply = {...filters, filter_blocked: 'false'}
+        return this._requester.call({
+            endpoint: new GetPublicationsEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: filtersToApply
         });
     }
 
@@ -316,7 +333,7 @@ class ApiClient {
 
     resetPassword(recoverEmail, onResponse) {
         return this._requester.call({
-            endpoint: new RecoverPasswordEndpoint("AUTH_FAKE"),
+            endpoint: new RecoverPasswordEndpoint(this._token),
             onResponse: (response) => this._handleResponse(response, onResponse),
             data: {email: recoverEmail}
         });
@@ -363,17 +380,14 @@ class ApiClient {
 
     getMetrics(initialDate, lastDate, onResponse) {
         const data = {
-            start_date: getISODateStringFrom(initialDate),
-            end_date: getISODateStringFrom(lastDate),
+            start_date: initialDate,
+            end_date: lastDate,
         }
-        return setTimeout(() => onResponse(new GetMetricsSuccessful(GetMetricsSuccessful.defaultResponse())),
-            2500);
-        //TODO: Llamar al endpoint
-        // return this._requester.call({
-        //     endpoint: new GetMetricsEndpoint(this._token),
-        //     onResponse: (response) => this._handleResponse(response, onResponse),
-        //     data: data
-        // });
+        return this._requester.call({
+            endpoint: new GetMetricsEndpoint(this._token),
+            onResponse: (response) => this._handleResponse(response, onResponse),
+            data: data
+        });
     }
 
     rechargeWallet(userAddress, accountMnemonic, amount, onResponse) {
