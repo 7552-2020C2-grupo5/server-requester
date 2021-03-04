@@ -45,6 +45,7 @@ import {GetLocationFromCoordinatesEndpoint} from "../endpoints/GetLocationFromCo
 import {GetMetricsEndpoint} from "../endpoints/GetMetricsEndpoint";
 import {GetRecommendationsByPopularEndpoint} from "../endpoints/GetRecommendationsByPopularEndpoint";
 import {GetRecommendationsByReviewsEndpoint} from "../endpoints/GetRecommendationsByReviewsEndpoint";
+import {MiddlewareNotUpErrorResponse} from "../responses/generalResponses/MiddlewareNotUpErrorResponse";
 
 
 class ApiClient {
@@ -55,6 +56,11 @@ class ApiClient {
         this._handleServerError = onServerErrorDo;
         this._onTokenExpired = onTokenExpired;
         this._handleResponse = this._handleResponse.bind(this);
+        this._serverModeOn = false;
+    }
+
+    setServerModeOn() {
+        this._serverModeOn = true;
     }
 
     setToken(token) {
@@ -74,7 +80,10 @@ class ApiClient {
         }
         if (response instanceof TokenExpiredResponse) {
             console.log("Token expired: ", response);
-            if (this._onTokenExpired !== undefined) {
+            if (this._serverModeOn) {
+                response = new MiddlewareNotUpErrorResponse(response.content(), response.httpStatusCode());
+            }
+            else if (this._onTokenExpired !== undefined) {
                 return this._onTokenExpired(response);
             }
         }

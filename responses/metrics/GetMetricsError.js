@@ -8,7 +8,7 @@ export class GetMetricsError extends ErrorResponse {
     }
 
     static understandThis(jsonResponse, httpStatusCode) {
-        return httpStatusCode >= 400;
+        return httpStatusCode === 400;
     }
 
     description() {
