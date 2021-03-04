@@ -1,5 +1,5 @@
 import {Endpoint} from "./Endpoint.js";
-import {PUBLICATIONS_BASE_ENDPOINT} from "../requester";
+import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PublicationIsBlocked} from "../responses/publications/PublicationIsBlocked";
 import {PublicationNotFound} from "../responses/publications/PublicationNotFound";
 import {GetPublicationStarsSuccessful} from "../responses/publications/stars/GetPublicationStarsSuccessful";
@@ -11,7 +11,7 @@ export class GetPublicationStarsEndpoint extends Endpoint {
     }
 
     url() {
-        return PUBLICATIONS_BASE_ENDPOINT + '/publications/' + this._publicationId + '/star'
+        return MIDDLEWARE_BASE_ENDPOINT + '/publications/' + this._publicationId + '/star'
     }
 
     ownResponses() {

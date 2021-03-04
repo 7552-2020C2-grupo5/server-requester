@@ -1,5 +1,4 @@
 import {Endpoint} from "./Endpoint.js";
-import {PUBLICATIONS_BASE_ENDPOINT} from "../requester";
 import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {PublicationNotFound} from "../responses/publications/PublicationNotFound";
 import {PublicationIsBlocked} from "../responses/publications/PublicationIsBlocked";
