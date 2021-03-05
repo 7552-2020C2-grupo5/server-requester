@@ -14,6 +14,10 @@ class RemoteRequester extends Requester {
             clone.text().then(text =>
                 console.log('Response: %s with body %s', response.status, text)
             )
+            if (response.status === 204) {
+                return this._buildResponse([], endpoint, response)
+            }
+
             return response.json().then(jsonResponse => {
                 return this._buildResponse(jsonResponse, endpoint, response)
             })
@@ -29,7 +33,7 @@ class RemoteRequester extends Requester {
          *
          ***/
         .catch(exception => {
-            if (trial < 2) {
+            if (trial < 4) {
                 // If fetch fails, we do a retry
                 return this.call({
                     endpoint: endpoint,

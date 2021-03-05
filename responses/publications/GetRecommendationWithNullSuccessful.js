@@ -1,6 +1,14 @@
 import {SuccessfulApiResponse} from "../generalResponses/SuccessfulApiResponse.js";
 
-export class GetPublicationsSuccessful extends SuccessfulApiResponse {
+export class GetRecommendationWithNullSuccessful extends SuccessfulApiResponse {
+    static understandThis(jsonResponse, httpStatusCode) {
+        return httpStatusCode === 204
+    }
+
+    recommendations() {
+        return []
+    }
+
     static defaultResponse() {
         return [
             {
@@ -27,10 +35,6 @@ export class GetPublicationsSuccessful extends SuccessfulApiResponse {
                 ]
             },
         ];
-    }
-
-    recommendations() {
-        return this.content().recommendations
     }
 
     publications() {
