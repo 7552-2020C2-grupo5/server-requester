@@ -2,6 +2,7 @@ import {Endpoint} from "./Endpoint.js";
 import {MIDDLEWARE_BASE_ENDPOINT} from "../requester";
 import {LoginSuccessful} from "../responses/login/LoginSuccessful";
 import {InvalidCredentials} from "../responses/login/InvalidCredentials";
+import {UserIsBlocked} from "../responses/users/UserIsBlocked";
 
 export class OAuthLoginEndpoint extends Endpoint {
     url() {
@@ -9,7 +10,7 @@ export class OAuthLoginEndpoint extends Endpoint {
     }
 
     ownResponses() {
-        return [LoginSuccessful];
+        return [LoginSuccessful, InvalidCredentials, UserIsBlocked];
     }
 
     method() {
